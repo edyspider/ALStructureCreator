@@ -55,7 +55,7 @@ Initial release of AL folder structure creator.
 [![License](https://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
 
 - **[MIT license](https://github.com/edyspider/ALStructureCreator/blob/master/LICENSE)**
-- Copyright 2020 ┬⌐ <a href="https://github.com/edyspider" target="_blank">EdySpider</a>.
+- Copyright 2020 &copy; <a href="https://github.com/edyspider" target="_blank">EdySpider</a>.
 
 ---
 
