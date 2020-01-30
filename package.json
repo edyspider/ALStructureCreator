@@ -1,0 +1,85 @@
+{
+	"name": "alstructurecreator",
+	"displayName": "AL Structure Creator",
+	"description": "Create folder structure for AL projects",
+	"publisher": "EdySpider",
+	"version": "0.0.1",
+	"engines": {
+		"vscode": "^1.41.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:es.al.createstructure"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "es.al.createstructure",
+				"title": "ES: Create Folder Structure"
+			}
+		],
+		"keybindings":[
+			{
+				"command": "es.al.createstructure",
+				"key": "Ctrl+Shift+E"
+			}
+		],
+		"configuration":[
+			{
+				"title": "AL Folder Structure",
+				"properties": {
+					"ALStructureCreator.AppSubfolderType": {
+						"type": "string",
+						"default": "Numbered",
+						"enum": ["Numbered","Named","None"],
+						"enumDescriptions": ["e.g.: 01_Table","e.g.: Table",""],
+						"description": "This configuration defines which type of application/object folder you want to create."
+					},
+					"ALStructureCreator.CreateExtObjFolder": {
+						"type": "boolean",
+						"default": false,
+						"description": "This configuration allows you to create extension subfolder for all application type object."
+					},
+					"ALStructureCreator.ProjectFolderOption": {
+						"type": "string",
+						"default": "Root",
+						"enum": ["Root","NewFolder"],
+						"enumDescriptions": ["Create AL folder structure in project root folder","Create AL folder structure in new folder under project root"],
+						"description": "This configuration allows you to create folder structure in the project root or in a new folder."
+					},
+					"ALStructureCreator.ErrorOnExistFolder": {
+						"type": "boolean",
+						"default": true,
+						"description": "This configuration allows to raise an error if the project folder already exists."
+					}
+				}
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile",
+		"test": "node ./out/test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/glob": "^7.1.1",
+		"@types/mocha": "^5.2.7",
+		"@types/node": "^12.11.7",
+		"@types/vscode": "^1.41.0",
+		"glob": "^7.1.5",
+		"mocha": "^6.2.2",
+		"typescript": "^3.6.4",
+		"tslint": "^5.20.0",
+		"vscode-test": "^1.2.2"
+	},
+	"repository": {
+        "type": "git",
+        "url": "https://github.com/edyspider/ALStructureCreator"
+    },
+    "icon": "icon.png"
+}
