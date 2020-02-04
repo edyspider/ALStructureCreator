@@ -13,6 +13,7 @@ const path = require("path");
 const fs = require("fs");
 const vscode = require("vscode");
 const al_project_folder_exist_error_1 = require("./errors/al-project-folder-exist.error");
+const FolderSettings_1 = require("./FolderSettings");
 class ALStructureCreator {
     constructor(workspaceRoot, window) {
         this.workspaceRoot = workspaceRoot;
@@ -20,7 +21,6 @@ class ALStructureCreator {
         this.objectFolder = ['App', 'Images', 'Logo', 'Permissions', 'Rules', 'Tests', 'Translations', 'WebServices'];
         this.appSubFolderNum = ['01_Table', '02_Page', '03_Report', '04_Codeunit', '05_Query', '06_XMLport', '07_Enum', '08_ControllAddin', '99_DotNet'];
         this.appSubFolderTxt = ['Table', 'Page', 'Report', 'Codeunit', 'Query', 'XMLport', 'Enum', 'ControllAddin', 'DotNet'];
-        this.extObjSuffix = ['Cust', 'Ext'];
         this.defaultPath = '';
     }
     execute() {
@@ -36,12 +36,12 @@ class ALStructureCreator {
                 const absoluteALPath = this.toAbsolutePath(alfolder);
                 try {
                     this.create(absoluteALPath, createInRoot);
-                    this.window.showInformationMessage(`ALFolderStructure: successfully created`);
+                    this.window.showInformationMessage(`ALStructureCreator: successfully created`);
                 }
                 catch (err) {
                     // log?
                     if (err instanceof al_project_folder_exist_error_1.ALProjectFolderExistError) {
-                        this.window.showErrorMessage(`ALFolderStructure: '${alfolder}' already exists`);
+                        this.window.showErrorMessage(`ALStructureCreator: '${alfolder}' already exists`);
                     }
                     else {
                         this.window.showErrorMessage(`Error: ${err.message}`);
@@ -51,7 +51,7 @@ class ALStructureCreator {
             else {
                 try {
                     this.create("", createInRoot);
-                    this.window.showInformationMessage(`ALFolderStructure: successfully created`);
+                    this.window.showInformationMessage(`ALStructureCreator: successfully created`);
                 }
                 catch (err) {
                     this.window.showErrorMessage(`Error: ${err.message}`);
@@ -90,6 +90,7 @@ class ALStructureCreator {
             absoluteALFolderPath = this.toAbsolutePath("");
         }
         try {
+            //FolderSettings.
             this.objectFolder.forEach((folder) => {
                 const foldername = `${folder}`;
                 const fullpath = path.join(absoluteALFolderPath, foldername);
@@ -105,11 +106,17 @@ class ALStructureCreator {
                                 const subFolderName = `${subFile}`;
                                 fullSubPath = path.join(fullpath, subFolderName);
                                 fs.mkdirSync(fullSubPath);
-                                if (createExtSubFolder === true) {
-                                    this.extObjSuffix.forEach((extFile) => {
-                                        const extFolderName = `${extFile}`;
-                                        fs.mkdirSync(fullSubPath + extFolderName);
-                                    });
+                                switch (createExtSubFolder) {
+                                    case 'Cust':
+                                        fs.mkdirSync(fullSubPath + 'Cust');
+                                        break;
+                                    case 'Ext':
+                                        fs.mkdirSync(fullSubPath + 'Ext');
+                                        break;
+                                    case 'Both':
+                                        fs.mkdirSync(fullSubPath + 'Cust');
+                                        fs.mkdirSync(fullSubPath + 'Ext');
+                                        break;
                                 }
                             });
                             break;
@@ -119,11 +126,17 @@ class ALStructureCreator {
                                 const subFolderName = `${subFile}`;
                                 fullSubPath = path.join(fullpath, subFolderName);
                                 fs.mkdirSync(fullSubPath);
-                                if (createExtSubFolder === true) {
-                                    this.extObjSuffix.forEach((extFile) => {
-                                        const extFolderName = `${extFile}`;
-                                        fs.mkdirSync(fullSubPath + extFolderName);
-                                    });
+                                switch (createExtSubFolder) {
+                                    case 'Cust':
+                                        fs.mkdirSync(fullSubPath + 'Cust');
+                                        break;
+                                    case 'Ext':
+                                        fs.mkdirSync(fullSubPath + 'Ext');
+                                        break;
+                                    case 'Both':
+                                        fs.mkdirSync(fullSubPath + 'Cust');
+                                        fs.mkdirSync(fullSubPath + 'Ext');
+                                        break;
                                 }
                             });
                             break;
@@ -140,6 +153,51 @@ class ALStructureCreator {
             // log other than console?
             console.log('Error', err.message);
             throw err;
+        }
+    }
+    createSingleFolder(appObject) {
+        const appFolder = this.toAbsolutePath(FolderSettings_1.FolderSettings.GetAppFolder());
+        let appFullpath = '';
+        if (!fs.existsSync(appFolder)) {
+            fs.mkdirSync(appFolder);
+        }
+        switch (appObject) {
+            case FolderSettings_1.FolderSettings.Table():
+                appFullpath = path.join(appFolder, FolderSettings_1.FolderSettings.Table());
+                fs.mkdirSync(appFullpath);
+                break;
+            case FolderSettings_1.FolderSettings.Page():
+                appFullpath = path.join(appFolder, FolderSettings_1.FolderSettings.Page());
+                fs.mkdirSync(appFullpath);
+                break;
+            case FolderSettings_1.FolderSettings.Report():
+                appFullpath = path.join(appFolder, FolderSettings_1.FolderSettings.Report());
+                fs.mkdirSync(appFullpath);
+                break;
+            case FolderSettings_1.FolderSettings.Codeunit():
+                appFullpath = path.join(appFolder, FolderSettings_1.FolderSettings.Codeunit());
+                fs.mkdirSync(appFullpath);
+                break;
+            case FolderSettings_1.FolderSettings.Query():
+                appFullpath = path.join(appFolder, FolderSettings_1.FolderSettings.Query());
+                fs.mkdirSync(appFullpath);
+                break;
+            case FolderSettings_1.FolderSettings.XMLport():
+                appFullpath = path.join(appFolder, FolderSettings_1.FolderSettings.XMLport());
+                fs.mkdirSync(appFullpath);
+                break;
+            case FolderSettings_1.FolderSettings.Enum():
+                appFullpath = path.join(appFolder, FolderSettings_1.FolderSettings.Enum());
+                fs.mkdirSync(appFullpath);
+                break;
+            case FolderSettings_1.FolderSettings.CtrlAddin():
+                appFullpath = path.join(appFolder, FolderSettings_1.FolderSettings.CtrlAddin());
+                fs.mkdirSync(appFullpath);
+                break;
+            case FolderSettings_1.FolderSettings.DotNet():
+                appFullpath = path.join(appFolder, FolderSettings_1.FolderSettings.DotNet());
+                fs.mkdirSync(appFullpath);
+                break;
         }
     }
     validate(name) {

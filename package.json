@@ -3,7 +3,7 @@
 	"displayName": "AL Structure Creator",
 	"description": "Create folder structure for AL projects",
 	"publisher": "EdySpider",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"engines": {
 		"vscode": "^1.41.0"
 	},
@@ -11,19 +11,64 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:es.al.createstructure"
+		"onCommand:alstructurecreator.createallstructure",
+		"onCommand:alstructurecreator.createtablefolder",
+		"onCommand:alstructurecreator.createpagefolder",
+		"onCommand:alstructurecreator.createreportfolder",
+		"onCommand:alstructurecreator.createcodeunitfolder",
+		"onCommand:alstructurecreator.createqueryfolder",
+		"onCommand:alstructurecreator.createxmlportfolder",
+		"onCommand:alstructurecreator.createenumfolder",
+		"onCommand:alstructurecreator.createactrladdinfolder",
+		"onCommand:alstructurecreator.createdotnetfolder"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "es.al.createstructure",
-				"title": "ES: Create Folder Structure"
+				"command": "alstructurecreator.createallstructure",
+				"title": "ES: Create All Folder Structure"
+			},
+			{
+				"command": "alstructurecreator.createtablefolder",
+				"title": "ES: Create Table Folder"
+			},
+			{
+				"command": "alstructurecreator.createpagefolder",
+				"title": "ES: Create Page Folder"
+			},
+			{
+				"command": "alstructurecreator.createreportfolder",
+				"title": "ES: Create Report Folder"
+			},
+			{
+				"command": "alstructurecreator.createcodeunitfolder",
+				"title": "ES: Create Codeunit Folder"
+			},
+			{
+				"command": "alstructurecreator.createqueryfolder",
+				"title": "ES: Create Query Folder"
+			},
+			{
+				"command": "alstructurecreator.createxmlportfolder",
+				"title": "ES: Create xmlport Folder"
+			},
+			{
+				"command": "alstructurecreator.createenumfolder",
+				"title": "ES: Create Enum Folder"
+			},
+			{
+				"command": "alstructurecreator.createactrladdinfolder",
+				"title": "ES: Create ControlAddin Folder"
+			},
+			{
+				"command": "alstructurecreator.createdotnetfolder",
+				"title": "ES: Create DotNet Folder"
 			}
 		],
 		"keybindings":[
 			{
-				"command": "es.al.createstructure",
+				"command": "alstructurecreator.createallstructure",
 				"key": "Ctrl+Shift+E"
 			}
 		],
@@ -39,9 +84,11 @@
 						"description": "This configuration defines which type of application/object folder you want to create."
 					},
 					"ALStructureCreator.CreateExtObjFolder": {
-						"type": "boolean",
-						"default": false,
-						"description": "This configuration allows you to create extension subfolder for all application type object."
+						"type": "string",
+						"default": "None",
+						"enum": ["None","Cust","Ext","Both"],
+						"enumDescriptions": ["","e.g.: TableCust","e.g.: TableExt","e.g.: TableCust, TableExt"],
+						"description": "This configuration allows you to create application subfolder for customer extensions."
 					},
 					"ALStructureCreator.ProjectFolderOption": {
 						"type": "string",

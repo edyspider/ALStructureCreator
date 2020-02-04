@@ -22,9 +22,26 @@ This extension allows you to create the folder structure for AL projects.
 This extension contributes the following settings:
 
 * `ALStructureCreator.AppSubfolderType`: This configuration defines which type of application/object folder you want to create, if **Numbered**, **Named** or **None**.
-* `ALStructureCreator.CreateExtObjFolder`: If set to **true** allows you to create extension/developer subfolder for all application type object (e.g.: **TableCust**,**TableExt**, ..).
+* `ALStructureCreator.CreateExtObjFolder`: THis configuration allows you to create extension/customer subfolder for application type object (e.g.: **TableCust**,**TableExt**, ..).
 * `ALStructureCreator.ErrorOnExistFolder`: This configuration allows you to create the AL structure in the project root or create a new folder every time you want create the AL structure.
-* `ALStructureCreator.ErrorOnExistFolder`: If set to **true** this configuration raise an error if the project folder already exists..
+* `ALStructureCreator.ErrorOnExistFolder`: If set to **true** this configuration raise an error if the project folder already exists.
+
+---
+
+## Extension Commands
+
+This extension contributes the following commands:
+
+* `ES: Create All Folder Structure`: This command create all application folder structure for AL projects.
+* `ES: Create Table Folder`: This command create the **table** application folder for AL projects.
+* `ES: Create Page Folder`: This command create the **page** application folder for AL projects.
+* `ES: Create Report Folder`: This command create the **report** application folder for AL projects.
+* `ES: Create Codeunit Folder`: This command create the **codeunit** application folder for AL projects.
+* `ES: Create Query Folder`: This command create the **query** application folder for AL projects.
+* `ES: Create XMLport Folder`: This command create the **xmlport** application folder for AL projects.
+* `ES: Create Enum Folder`: This command create the **enum** application folder for AL projects.
+* `ES: Create ControllAddin Folder`: This command create the **controlladdin** application folder for AL projects.
+* `ES: Create DotNet Folder`: This command create the **dotnet** application folder for AL projects.
 
 ---
 
@@ -36,11 +53,15 @@ There are no reported issues.
 
 ## Release Notes
 
-This is a pre-release.
+This is the first release.
 
 ### 0.0.1
 
-Initial release of AL folder structure creator.
+Initial release.
+
+### 0.0.2
+
+Add new commands.
 
 -----------------------------------------------------------------------------------------------------------
 

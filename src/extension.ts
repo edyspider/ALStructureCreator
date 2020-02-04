@@ -4,30 +4,56 @@ import * as vscode from 'vscode';
 import { commands, workspace, window, ExtensionContext } from 'vscode';
 import { ALStructureCreator } from './ALStructureCreator';
 import { getWorkspaceFolder } from './utils/workspace-util';
+import { FolderSettings } from './FolderSettings';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	//console.log('Congratulations, your extension "AL Folder Structure" is now active!');
-
 	const workspaceRoot: string = getWorkspaceFolder(workspace.workspaceFolders);
 	const generator = new ALStructureCreator(workspaceRoot, window);
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('es.al.createstructure', () => {
-		// The code you place here will be executed every time your command is executed
-
-		// Display a message box to the user
-		//vscode.window.showInformationMessage('Create AL Folder Structure');
+	let disposable = vscode.commands.registerCommand('alstructurecreator.createallstructure', () => {
 		generator.execute();
 	});
 
+	let disposableTable = vscode.commands.registerCommand('alstructurecreator.createtablefolder', () => {
+		generator.createFolder(FolderSettings.Table());
+	});
+	let disposablePage = vscode.commands.registerCommand('alstructurecreator.createpagefolder', () => {
+		generator.createFolder(FolderSettings.Page());
+	});
+	let disposableReport = vscode.commands.registerCommand('alstructurecreator.createreportfolder', () => {
+		generator.createFolder(FolderSettings.Report());
+	});
+	let disposableCodeunit = vscode.commands.registerCommand('alstructurecreator.createcodeunitfolder', () => {
+		generator.createFolder(FolderSettings.Codeunit());
+	});
+	let disposableQuery = vscode.commands.registerCommand('alstructurecreator.createqueryfolder', () => {
+		generator.createFolder(FolderSettings.Query());
+	});
+	let disposableXMLport = vscode.commands.registerCommand('alstructurecreator.createxmlportfolder', () => {
+		generator.createFolder(FolderSettings.XMLport());
+	});
+	let disposableEnum = vscode.commands.registerCommand('alstructurecreator.createenumfolder', () => {
+		generator.createFolder(FolderSettings.Enum());
+	});
+	let disposableCtrlAddin = vscode.commands.registerCommand('alstructurecreator.createactrladdinfolder', () => {
+		generator.createFolder(FolderSettings.CtrlAddin());
+	});
+	let disposableDotNet = vscode.commands.registerCommand('alstructurecreator.createdotnetfolder', () => {
+		generator.createFolder(FolderSettings.DotNet());
+	});
+
 	context.subscriptions.push(disposable);
+	context.subscriptions.push(disposableTable);
+	context.subscriptions.push(disposablePage);
+	context.subscriptions.push(disposableReport);
+	context.subscriptions.push(disposableCodeunit);
+	context.subscriptions.push(disposableQuery);
+	context.subscriptions.push(disposableXMLport);
+	context.subscriptions.push(disposableEnum);
+	context.subscriptions.push(disposableCtrlAddin);
+	context.subscriptions.push(disposableDotNet);
 	context.subscriptions.push(generator);
 }
 

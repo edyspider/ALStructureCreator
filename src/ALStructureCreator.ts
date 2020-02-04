@@ -6,12 +6,12 @@ import { InputBoxOptions } from "vscode";
 import { IDisposable } from './disposable.interface';
 import { VSCodeWindow } from './vscode.interfaces';
 import { ALProjectFolderExistError } from './errors/al-project-folder-exist.error';
+import { FolderSettings } from './FolderSettings';
 
 export class ALStructureCreator implements IDisposable {
   private readonly objectFolder = ['App', 'Images', 'Logo', 'Permissions', 'Rules', 'Tests', 'Translations', 'WebServices'];
   private readonly appSubFolderNum = ['01_Table', '02_Page', '03_Report', '04_Codeunit', '05_Query', '06_XMLport', '07_Enum', '08_ControllAddin', '99_DotNet'];
   private readonly appSubFolderTxt = ['Table', 'Page', 'Report', 'Codeunit', 'Query', 'XMLport', 'Enum', 'ControllAddin', 'DotNet'];
-  private readonly extObjSuffix = ['Cust', 'Ext'];
   private readonly defaultPath = '';
 
   constructor(
@@ -36,11 +36,11 @@ export class ALStructureCreator implements IDisposable {
       try {
         this.create(absoluteALPath,createInRoot);
         
-        this.window.showInformationMessage(`ALFolderStructure: successfully created`);
+        this.window.showInformationMessage(`ALStructureCreator: successfully created`);
       } catch (err) {     
         // log?
         if (err instanceof ALProjectFolderExistError) {
-          this.window.showErrorMessage(`ALFolderStructure: '${alfolder}' already exists`);
+          this.window.showErrorMessage(`ALStructureCreator: '${alfolder}' already exists`);
         } else {
           this.window.showErrorMessage(`Error: ${err.message}`);
         }
@@ -49,7 +49,7 @@ export class ALStructureCreator implements IDisposable {
       try {
         this.create("",createInRoot);
 
-        this.window.showInformationMessage(`ALFolderStructure: successfully created`);
+        this.window.showInformationMessage(`ALStructureCreator: successfully created`);
       } catch (err) {
         this.window.showErrorMessage(`Error: ${err.message}`);
       }
@@ -87,7 +87,8 @@ export class ALStructureCreator implements IDisposable {
       absoluteALFolderPath = this.toAbsolutePath("");
     }
 
-    try {      
+    try {
+      //FolderSettings.
       this.objectFolder.forEach((folder: string) => {
         const foldername = `${folder}`;
         const fullpath = path.join(absoluteALFolderPath, foldername);
@@ -109,11 +110,17 @@ export class ALStructureCreator implements IDisposable {
   
                 fs.mkdirSync(fullSubPath);
   
-                if(createExtSubFolder===true) {
-                  this.extObjSuffix.forEach((extFile: string) => {
-                    const extFolderName = `${extFile}`;
-                    fs.mkdirSync(fullSubPath+extFolderName);
-                  });
+                switch(createExtSubFolder) {
+                  case 'Cust':
+                    fs.mkdirSync(fullSubPath+'Cust');
+                    break;
+                  case 'Ext':
+                    fs.mkdirSync(fullSubPath+'Ext');
+                    break;
+                  case 'Both':
+                    fs.mkdirSync(fullSubPath+'Cust');
+                    fs.mkdirSync(fullSubPath+'Ext');
+                    break;
                 }
               });
                break; 
@@ -125,11 +132,17 @@ export class ALStructureCreator implements IDisposable {
   
                 fs.mkdirSync(fullSubPath);
   
-                if(createExtSubFolder===true) {
-                  this.extObjSuffix.forEach((extFile: string) => {
-                    const extFolderName = `${extFile}`;
-                    fs.mkdirSync(fullSubPath+extFolderName);
-                  });
+                switch(createExtSubFolder) {
+                  case 'Cust':
+                    fs.mkdirSync(fullSubPath+'Cust');
+                    break;
+                  case 'Ext':
+                    fs.mkdirSync(fullSubPath+'Ext');
+                    break;
+                  case 'Both':
+                    fs.mkdirSync(fullSubPath+'Cust');
+                    fs.mkdirSync(fullSubPath+'Ext');
+                    break;
                 }
               });
                break; 
@@ -146,6 +159,54 @@ export class ALStructureCreator implements IDisposable {
       console.log('Error', err.message);
 
       throw err;
+    }
+  }
+
+  createFolder(appObject: string) {
+    const appFolder = this.toAbsolutePath(FolderSettings.GetAppFolder());
+    let appFullpath = '';
+
+    if (!fs.existsSync(appFolder)) {
+      fs.mkdirSync(appFolder);
+    }
+
+    switch(appObject) {
+      case FolderSettings.Table():
+        appFullpath = path.join(appFolder, FolderSettings.Table());
+        fs.mkdirSync(appFullpath);
+        break;
+      case FolderSettings.Page():
+        appFullpath = path.join(appFolder, FolderSettings.Page());
+        fs.mkdirSync(appFullpath);
+        break;
+      case FolderSettings.Report():
+        appFullpath = path.join(appFolder, FolderSettings.Report());
+        fs.mkdirSync(appFullpath);
+        break;
+      case FolderSettings.Codeunit():
+        appFullpath = path.join(appFolder, FolderSettings.Codeunit());
+        fs.mkdirSync(appFullpath);
+        break;
+      case FolderSettings.Query():
+        appFullpath = path.join(appFolder, FolderSettings.Query());
+        fs.mkdirSync(appFullpath);
+        break;
+      case FolderSettings.XMLport():
+        appFullpath = path.join(appFolder, FolderSettings.XMLport());
+        fs.mkdirSync(appFullpath);
+        break;
+      case FolderSettings.Enum():
+        appFullpath = path.join(appFolder, FolderSettings.Enum());
+        fs.mkdirSync(appFullpath);
+        break;
+      case FolderSettings.CtrlAddin():
+        appFullpath = path.join(appFolder, FolderSettings.CtrlAddin());
+        fs.mkdirSync(appFullpath);
+        break;
+      case FolderSettings.DotNet():
+        appFullpath = path.join(appFolder, FolderSettings.DotNet());
+        fs.mkdirSync(appFullpath);
+        break;
     }
   }
   
