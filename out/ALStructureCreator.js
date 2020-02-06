@@ -155,7 +155,7 @@ class ALStructureCreator {
             throw err;
         }
     }
-    createSingleFolder(appObject) {
+    createFolder(appObject) {
         const appFolder = this.toAbsolutePath(FolderSettings_1.FolderSettings.GetAppFolder());
         let appFullpath = '';
         if (!fs.existsSync(appFolder)) {

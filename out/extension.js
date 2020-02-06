@@ -16,31 +16,31 @@ function activate(context) {
         generator.execute();
     });
     let disposableTable = vscode.commands.registerCommand('alstructurecreator.createtablefolder', () => {
-        generator.createSingleFolder(FolderSettings_1.FolderSettings.Table());
+        generator.createFolder(FolderSettings_1.FolderSettings.Table());
     });
     let disposablePage = vscode.commands.registerCommand('alstructurecreator.createpagefolder', () => {
-        generator.createSingleFolder(FolderSettings_1.FolderSettings.Page());
+        generator.createFolder(FolderSettings_1.FolderSettings.Page());
     });
     let disposableReport = vscode.commands.registerCommand('alstructurecreator.createreportfolder', () => {
-        generator.createSingleFolder(FolderSettings_1.FolderSettings.Report());
+        generator.createFolder(FolderSettings_1.FolderSettings.Report());
     });
     let disposableCodeunit = vscode.commands.registerCommand('alstructurecreator.createcodeunitfolder', () => {
-        generator.createSingleFolder(FolderSettings_1.FolderSettings.Codeunit());
+        generator.createFolder(FolderSettings_1.FolderSettings.Codeunit());
     });
     let disposableQuery = vscode.commands.registerCommand('alstructurecreator.createqueryfolder', () => {
-        generator.createSingleFolder(FolderSettings_1.FolderSettings.Query());
+        generator.createFolder(FolderSettings_1.FolderSettings.Query());
     });
     let disposableXMLport = vscode.commands.registerCommand('alstructurecreator.createxmlportfolder', () => {
-        generator.createSingleFolder(FolderSettings_1.FolderSettings.XMLport());
+        generator.createFolder(FolderSettings_1.FolderSettings.XMLport());
     });
     let disposableEnum = vscode.commands.registerCommand('alstructurecreator.createenumfolder', () => {
-        generator.createSingleFolder(FolderSettings_1.FolderSettings.Enum());
+        generator.createFolder(FolderSettings_1.FolderSettings.Enum());
     });
     let disposableCtrlAddin = vscode.commands.registerCommand('alstructurecreator.createactrladdinfolder', () => {
-        generator.createSingleFolder(FolderSettings_1.FolderSettings.CtrlAddin());
+        generator.createFolder(FolderSettings_1.FolderSettings.CtrlAddin());
     });
     let disposableDotNet = vscode.commands.registerCommand('alstructurecreator.createdotnetfolder', () => {
-        generator.createSingleFolder(FolderSettings_1.FolderSettings.DotNet());
+        generator.createFolder(FolderSettings_1.FolderSettings.DotNet());
     });
     context.subscriptions.push(disposable);
     context.subscriptions.push(disposableTable);
