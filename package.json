@@ -3,7 +3,7 @@
 	"displayName": "AL Structure Creator",
 	"description": "Create folder structure for AL projects",
 	"publisher": "EdySpider",
-	"version": "0.0.2",
+	"version": "0.1.0",
 	"engines": {
 		"vscode": "^1.41.0"
 	},
@@ -20,7 +20,8 @@
 		"onCommand:alstructurecreator.createxmlportfolder",
 		"onCommand:alstructurecreator.createenumfolder",
 		"onCommand:alstructurecreator.createactrladdinfolder",
-		"onCommand:alstructurecreator.createdotnetfolder"
+		"onCommand:alstructurecreator.createdotnetfolder",
+		"onCommand:alstructurecreator.reorganizeobjects"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -64,12 +65,20 @@
 			{
 				"command": "alstructurecreator.createdotnetfolder",
 				"title": "ES: Create DotNet Folder"
+			},
+			{
+				"command": "alstructurecreator.reorganizeobjects",
+				"title": "ES: Reorganize Objects"
 			}
 		],
 		"keybindings":[
 			{
 				"command": "alstructurecreator.createallstructure",
-				"key": "Ctrl+Shift+E"
+				"key": "Alt-E+Alt-C"
+			},
+			{
+				"command": "alstructurecreator.reorganizeobjects",
+				"key": "Alt-E+Alt-R"
 			}
 		],
 		"configuration":[
@@ -90,17 +99,55 @@
 						"enumDescriptions": ["","e.g.: TableCust","e.g.: TableExt","e.g.: TableCust, TableExt"],
 						"description": "This configuration allows you to create application subfolder for customer extensions."
 					},
-					"ALStructureCreator.ProjectFolderOption": {
-						"type": "string",
-						"default": "Root",
-						"enum": ["Root","NewFolder"],
-						"enumDescriptions": ["Create AL folder structure in project root folder","Create AL folder structure in new folder under project root"],
-						"description": "This configuration allows you to create folder structure in the project root or in a new folder."
-					},
 					"ALStructureCreator.ErrorOnExistFolder": {
 						"type": "boolean",
-						"default": true,
-						"description": "This configuration allows to raise an error if the project folder already exists."
+						"default": false,
+						"description": "This configuration allows to raise an error if the folder you want to create already exists."
+					},
+					"ALStructureCreator.ObjectPrefix.Table": {
+						"type": "string",
+						"default": "Tab",
+						"description": "This configuration defines application object type table prefix."
+					},
+					"ALStructureCreator.ObjectPrefix.Page": {
+						"type": "string",
+						"default": "Pag",
+						"description": "This configuration defines application object type page prefix."
+					},
+					"ALStructureCreator.ObjectPrefix.Report": {
+						"type": "string",
+						"default": "Rep",
+						"description": "This configuration defines application object type report prefix."
+					},
+					"ALStructureCreator.ObjectPrefix.Codeunit": {
+						"type": "string",
+						"default": "Cod",
+						"description": "This configuration defines application object type codeunit prefix."
+					},
+					"ALStructureCreator.ObjectPrefix.Query": {
+						"type": "string",
+						"default": "Que",
+						"description": "This configuration defines application object type query prefix."
+					},
+					"ALStructureCreator.ObjectPrefix.XMLport": {
+						"type": "string",
+						"default": "Xml",
+						"description": "This configuration defines application object type xmlport prefix."
+					},
+					"ALStructureCreator.ObjectPrefix.Enum": {
+						"type": "string",
+						"default": "Enu",
+						"description": "This configuration defines application object type enum prefix."
+					},
+					"ALStructureCreator.ObjectPrefix.ControlAddIn": {
+						"type": "string",
+						"default": "ControlAddin",
+						"description": "This configuration defines application object type control addin prefix."
+					},
+					"ALStructureCreator.ObjectPrefix.DotNet": {
+						"type": "string",
+						"default": "DotNet",
+						"description": "This configuration defines application object type .net prefix."
 					}
 				}
 			}

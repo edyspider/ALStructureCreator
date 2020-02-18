@@ -6,7 +6,9 @@
 
 This extension allows you to create the folder structure for AL projects.
 
-![ALStructureCreator](images/es-al-sc.gif)
+![ALStructureCreator-CreateStructure](images/ES-AL-SC_CreateStructure.gif)
+
+![ALStructureCreator-ReorganizeObjects](images/ES-AL-SC__Reorganize.gif)
 
 ---
 
@@ -22,9 +24,9 @@ This extension allows you to create the folder structure for AL projects.
 This extension contributes the following settings:
 
 * `ALStructureCreator.AppSubfolderType`: This configuration defines which type of application/object folder you want to create, if **Numbered**, **Named** or **None**.
-* `ALStructureCreator.CreateExtObjFolder`: THis configuration allows you to create extension/customer subfolder for application type object (e.g.: **TableCust**,**TableExt**, ..).
-* `ALStructureCreator.ErrorOnExistFolder`: This configuration allows you to create the AL structure in the project root or create a new folder every time you want create the AL structure.
+* `ALStructureCreator.CreateExtObjFolder`: This configuration allows you to create extension/customer subfolder for application type object (e.g.: **TableCust**,**TableExt**, ..).
 * `ALStructureCreator.ErrorOnExistFolder`: If set to **true** this configuration raise an error if the project folder already exists.
+* `ALStructureCreator.ObjectPrefix.<ObjectType>`: This set of configuration defines the prefix of application object file so it can be reorganized in the corresponding application folder.
 
 ---
 
@@ -42,6 +44,7 @@ This extension contributes the following commands:
 * `ES: Create Enum Folder`: This command create the **enum** application folder for AL projects.
 * `ES: Create ControllAddin Folder`: This command create the **controlladdin** application folder for AL projects.
 * `ES: Create DotNet Folder`: This command create the **dotnet** application folder for AL projects.
+* `ES: Reorganize Objects`: This command move the applications objects from the root folder to the corresponding application folder.
 
 ---
 
@@ -53,7 +56,7 @@ There are no reported issues.
 
 ## Release Notes
 
-This is the first release.
+Updated release **0.1.0**.
 
 ### 0.0.1
 
@@ -61,7 +64,14 @@ Initial release.
 
 ### 0.0.2
 
-Add new commands.
+Add new command to create an application object folder individually.
+
+### 0.1.0
+
+Add new command to move/**reorganize** application objects to the corresponding application folders.
+Add new configurations to be used in the new command.
+Remove the configuration `ProjectFolderOption`.
+Add new folder validations.
 
 -----------------------------------------------------------------------------------------------------------
 

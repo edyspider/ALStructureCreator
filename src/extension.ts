@@ -17,31 +17,34 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	let disposableTable = vscode.commands.registerCommand('alstructurecreator.createtablefolder', () => {
-		generator.createFolder(FolderSettings.Table());
+		generator.createFolder(FolderSettings.TableFolder());
 	});
 	let disposablePage = vscode.commands.registerCommand('alstructurecreator.createpagefolder', () => {
-		generator.createFolder(FolderSettings.Page());
+		generator.createFolder(FolderSettings.PageFolder());
 	});
 	let disposableReport = vscode.commands.registerCommand('alstructurecreator.createreportfolder', () => {
-		generator.createFolder(FolderSettings.Report());
+		generator.createFolder(FolderSettings.ReportFolder());
 	});
 	let disposableCodeunit = vscode.commands.registerCommand('alstructurecreator.createcodeunitfolder', () => {
-		generator.createFolder(FolderSettings.Codeunit());
+		generator.createFolder(FolderSettings.CodeunitFolder());
 	});
 	let disposableQuery = vscode.commands.registerCommand('alstructurecreator.createqueryfolder', () => {
-		generator.createFolder(FolderSettings.Query());
+		generator.createFolder(FolderSettings.QueryFolder());
 	});
 	let disposableXMLport = vscode.commands.registerCommand('alstructurecreator.createxmlportfolder', () => {
-		generator.createFolder(FolderSettings.XMLport());
+		generator.createFolder(FolderSettings.XMLportFolder());
 	});
 	let disposableEnum = vscode.commands.registerCommand('alstructurecreator.createenumfolder', () => {
-		generator.createFolder(FolderSettings.Enum());
+		generator.createFolder(FolderSettings.EnumFolder());
 	});
 	let disposableCtrlAddin = vscode.commands.registerCommand('alstructurecreator.createactrladdinfolder', () => {
-		generator.createFolder(FolderSettings.CtrlAddin());
+		generator.createFolder(FolderSettings.CtrlAddinFolder());
 	});
 	let disposableDotNet = vscode.commands.registerCommand('alstructurecreator.createdotnetfolder', () => {
-		generator.createFolder(FolderSettings.DotNet());
+		generator.createFolder(FolderSettings.DotNetFolder());
+	});
+	let disposableReOrganize = vscode.commands.registerCommand('alstructurecreator.reorganizeobjects', () => {
+		generator.reorganizeAppObjects();
 	});
 
 	context.subscriptions.push(disposable);
@@ -54,6 +57,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposableEnum);
 	context.subscriptions.push(disposableCtrlAddin);
 	context.subscriptions.push(disposableDotNet);
+	context.subscriptions.push(disposableReOrganize);
 	context.subscriptions.push(generator);
 }
 
