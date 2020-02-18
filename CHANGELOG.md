@@ -2,24 +2,23 @@
 
 All notable changes to the **AL Structure Creator** extension will be documented in this file.
 
-## [Unreleased]
 
-### [0.1.0]
+## 0.1.0
 
-#### Added
+### Added
 - New command to move/**reorganize** application objects to the corresponding application folders.
 - New configurations to be used in the new command.
-- Add new folder validations.
+- New folder validations.
 
-#### Removed
+### Removed
 - Configuration `ProjectFolderOption`.
 
-### 0.0.2
 
-#### Added
+## 0.0.2
 
+### Added
 - New command to create an application object folder individually.
 
-### 0.0.1
 
-Initial release.
+## 0.0.1
+- Initial release.

@@ -58,20 +58,16 @@ There are no reported issues.
 
 Updated release **0.1.0**.
 
-### 0.0.1
+#### Added
+- New command to move/**reorganize** application objects to the corresponding application folders.
+- New configurations to be used in the new command.
+- New folder validations.
 
-Initial release.
+#### Removed
+- Configuration `ProjectFolderOption`.
 
-### 0.0.2
 
-Add new command to create an application object folder individually.
-
-### 0.1.0
-
-Add new command to move/**reorganize** application objects to the corresponding application folders.
-Add new configurations to be used in the new command.
-Remove the configuration `ProjectFolderOption`.
-Add new folder validations.
+#### View [Change Log](https://github.com/edyspider/ALStructureCreator/blob/master/CHANGELOG.md)
 
 -----------------------------------------------------------------------------------------------------------
 
