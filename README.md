@@ -4,7 +4,7 @@
 
 ## Features
 
-This extension allows you to create the folder structure for AL projects.
+This extension allows you to create the folder structure for AL projects and help you organize the application files.
 
 ![ALStructureCreator-CreateStructure](images/ES-AL-SC_CreateStructure.gif)
 
@@ -56,15 +56,10 @@ There are no reported issues.
 
 ## Release Notes
 
-Updated release **0.1.0**.
+Updated release **0.2.0**.
 
 #### Added
-- New command to move/**reorganize** application objects to the corresponding application folders.
-- New configurations to be used in the new command.
-- New folder validations.
-
-#### Removed
-- Configuration `ProjectFolderOption`.
+- New configuration and functionality that allows to create a Layout folder inside application folder Report for all the RDL/RDLC files.
 
 
 #### View [Change Log](https://github.com/edyspider/ALStructureCreator/blob/master/CHANGELOG.md)
@@ -74,6 +69,7 @@ Updated release **0.1.0**.
 ## Authors
 
 * [**EdySpider**](https://github.com/edyspider/)
+* [**Eder Leal da Silva**](https://github.com/ederlealsilva/)
 
 ---
 

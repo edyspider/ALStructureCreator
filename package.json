@@ -3,7 +3,7 @@
 	"displayName": "AL Structure Creator",
 	"description": "Create folder structure for AL projects",
 	"publisher": "EdySpider",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"engines": {
 		"vscode": "^1.41.0"
 	},
@@ -98,6 +98,11 @@
 						"enum": ["None","Cust","Ext","Both"],
 						"enumDescriptions": ["","e.g.: TableCust","e.g.: TableExt","e.g.: TableCust, TableExt"],
 						"description": "This configuration allows you to create application subfolder for customer extensions."
+					},
+					"ALStructureCreator.CreateReportLayoutFolder": {
+						"type": "boolean",
+						"default": true,
+						"description": "This configuration allows to Layout subfolder inside report folder for the RDL objects."
 					},
 					"ALStructureCreator.ErrorOnExistFolder": {
 						"type": "boolean",
