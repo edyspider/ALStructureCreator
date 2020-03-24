@@ -37,6 +37,9 @@ export class ALStructureCreator implements IDisposable {
       const folders: string[] = FolderSettings.GetProjectFolders();
       const appSubFolders: string[] = FolderSettings.GetAppSubfolders();
       const validateFolder: Boolean = FolderSettings.ValidateFolderBeforeCreate();
+      const repFolderName = FolderSettings.ReportFolder();
+      const layoutFolderName = FolderSettings.ReportLayoutFolder();
+      const createRepLayoutFolder: Boolean = FolderSettings.CreateLayoutSubfolder();
 
       folders.forEach((folder: string) => {
         const foldername = `${folder}`;
@@ -68,6 +71,20 @@ export class ALStructureCreator implements IDisposable {
                   throw new ALSCExistError(`App subfolder '${subFolder}' already exists`);
                 }
                 fs.mkdirSync(fullsubpath);
+              }
+
+              if((subfoldername===repFolderName) && (createRepLayoutFolder)) {
+                const layoutFolderPath = path.join(fullsubpath,layoutFolderName);
+                if(validateFolder) {
+                  if(!fs.existsSync(layoutFolderPath)) {
+                    fs.mkdirSync(layoutFolderPath);
+                  }
+                }  else {
+                  if(fs.existsSync(layoutFolderPath)) {
+                    throw new ALSCExistError(`App subfolder '${layoutFolderName}' already exists`);
+                  }
+                  fs.mkdirSync(layoutFolderPath);
+                }
               }
             });
           }
@@ -164,6 +181,13 @@ export class ALStructureCreator implements IDisposable {
     const enuFolder = path.join(appFolder, FolderSettings.EnumFolder());
     const cddFolder = path.join(appFolder, FolderSettings.CtrlAddinFolder());
     const dntFolder = path.join(appFolder, FolderSettings.DotNetFolder());
+    let layoutFolder = "";
+    
+    if (FolderSettings.CreateLayoutSubfolder()) {
+      layoutFolder = path.join(repFolder, FolderSettings.ReportLayoutFolder());
+    } else {
+      layoutFolder = repFolder;
+    }
 
     const rdlExt = FolderSettings.GetRdlExtension();
     const rdlcExt = FolderSettings.GetRdlcExtension();
@@ -182,6 +206,7 @@ export class ALStructureCreator implements IDisposable {
       let iCountDnt: number = 0;
       let iCountPerm: number = 0;
       let iCountTran: number = 0;
+      let iCountLay: number = 0;
       let iCountTotalt: number = 0;
 
       fs.readdirSync(rootFolder).forEach(file => {
@@ -247,8 +272,8 @@ export class ALStructureCreator implements IDisposable {
 
         // RDL and RDLC files
         if((file.indexOf('.') !== 0) && ((file.slice(-4) === rdlExt) || (file.slice(-5) === rdlcExt))) {
-          fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(repFolder, path.basename(file)));
-          iCountRep += 1;
+          fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(layoutFolder, path.basename(file)));
+          iCountLay += 1;
         }
 
         // Translation files
@@ -258,7 +283,23 @@ export class ALStructureCreator implements IDisposable {
         }
       });
 
-      iCountTotalt=iCountTab+iCountPag+iCountRep+iCountCod+iCountQue+iCountXml+iCountEnu+iCountCdd+iCountDnt+iCountPerm+iCountTran;
+      iCountTotalt=iCountTab+iCountPag+iCountRep+iCountCod+iCountQue+iCountXml+iCountEnu+iCountCdd+iCountDnt+iCountPerm+iCountTran+iCountLay;
+
+      console.log('ALStructureCreator: Reorganize Application Folder Status');
+      console.log(' * Table........',iCountTab);
+      console.log(' * Page.........',iCountPag);
+      console.log(' * Report.......',iCountRep);
+      console.log(' * Layout.......',iCountLay);
+      console.log(' * Codeunit.....',iCountCod);
+      console.log(' * Query........',iCountQue);
+      console.log(' * XMLport......',iCountXml);
+      console.log(' * Enum.........',iCountEnu);
+      console.log(' * CtrlAddin....',iCountCdd);
+      console.log(' * DotNet.......',iCountDnt);
+      console.log(' * Permission...',iCountDnt);
+      console.log(' * Translation..',iCountDnt);
+      console.log(' ');
+      console.log(' * Total.......',iCountTotalt);
 
       this.window.showInformationMessage(`ALStructureCreator: Reorganization finished. Total moved files: `+iCountTotalt);
     } catch (err) {

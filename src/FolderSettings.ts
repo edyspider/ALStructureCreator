@@ -16,8 +16,7 @@ export class FolderSettings {
     private static propAppFolderNone = 'None';
     private static propExtFolderCust = 'Cust';
     private static propExtFolderExt = 'Ext';
-    private static propProjectFolderRoot = 'Root';
-    private static propProjectFolderNew = 'NewFolder';
+    private static propLayoutSubFolder = 'Layout';
 
     private static translationFolder = 'Translations';
     private static permissionFolder = 'Permissions';
@@ -56,6 +55,12 @@ export class FolderSettings {
     public static CreateAppSubfolders(): Boolean {
         return Boolean(
             vscode.workspace.getConfiguration().get('ALStructureCreator.AppSubfolderType') !== this.propAppFolderNone
+            );
+    }
+
+    public static CreateLayoutSubfolder(): Boolean {
+        return Boolean(
+            vscode.workspace.getConfiguration().get('ALStructureCreator.CreateReportLayoutFolder') === true
             );
     }
 
@@ -231,6 +236,10 @@ export class FolderSettings {
                 return '';
                 break;
         }
+    }
+    
+    public static ReportLayoutFolder() {
+        return this.propLayoutSubFolder;
     }
 
     public static CodeunitFolder() {
