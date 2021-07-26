@@ -46,7 +46,7 @@ You can also customize the standard structure or use other names to create a fol
 
 This extension contributes the following settings:
 
-* `ALStructureCreator.FoldertStructure`: This configuration allows you to define the folder structure for AL projects that best suits you.
+* `ALStructureCreator.FolderStructure`: This configuration allows you to define the folder structure for AL projects that best suits you.
 * `ALStructureCreator.ObjectIdentification`: This configuration defines how to identify the objects files, by the object prefix/suffix filename or reading the file. **Prefix**,**Suffix** or **Object** (e.g: `TabEmployeMgt.al`,`EmployeeMgtTab.al`, `..OBJECT Table 50010`).
 * `ALStructureCreator.ObjectIdent.<ObjectType>`: This configuration defines how to identify a specific object file by its prefix/suffix name.
 

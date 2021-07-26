@@ -30,7 +30,7 @@ export class StructureSettings {
     private static objEnumTable = "table";
     private static objEnumXmlport = "xmlport";
 
-    private static structureRootPath = 'ALStructureCreator.FoldertStructure.structure';
+    private static structureRootPath = 'ALStructureCreator.FolderStructure.structure';
 
     private static fileExtAl = 'al';
     private static fileExtDocx = 'docx';

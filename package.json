@@ -62,7 +62,7 @@
 			{
 				"title": "AL Folder Structure",
 				"properties": {
-					"ALStructureCreator.FoldertStructure": {
+					"ALStructureCreator.FolderStructure": {
 						"type": "object",
 						"description": "This configuration allows you to define the folder structure for AL projects.",
 						"scope": "window",

@@ -22,7 +22,7 @@ export class ALStructureCreator implements IDisposable {
   }
 
   async addNewFolder(): Promise<void> {
-    let forldersName: string[] = ["table", "page", "codeunit", "report", "xmlport", "interface", "enum", "entitlement", "dotnet", "permissions", "translations"];
+    let forldersName: string[] = ["tab, table", "pag, page", "cod, codeunit", "rep, report", "xml, xmlport", "int, interface", "enu, enum", "ent, entitlement", "dnet, dotnet", "perm, permission", "pers, permissionset", "tran, translations"];
     const rndInt = Math.floor(Math.random() * 11) + 1;
 
     const options: InputBoxOptions = {
