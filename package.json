@@ -3,25 +3,34 @@
 	"displayName": "AL Structure Creator",
 	"description": "Create folder structure for AL projects",
 	"publisher": "EdySpider",
-	"version": "0.2.0",
-	"engines": {
-		"vscode": "^1.41.0"
+	"icon": "logo/icon.png",
+	"author": {
+		"name": "EdySpider",
+		"url": "https://github.com/edyspider",
+		"email": "dev@edyspider.com"
+	},
+	"version": "0.3.1",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/edyspider/ALStructureCreator/issues"
 	},
 	"categories": [
 		"Other"
 	],
+	"keywords": [
+		"AL",
+		"AL Extensions",
+		"Business Central",
+		"D365BC",
+		"Dynamics NAV"
+	],
+	"engines": {
+		"vscode": "^1.41.0"
+	},
 	"activationEvents": [
 		"onCommand:alstructurecreator.createallstructure",
-		"onCommand:alstructurecreator.createtablefolder",
-		"onCommand:alstructurecreator.createpagefolder",
-		"onCommand:alstructurecreator.createreportfolder",
-		"onCommand:alstructurecreator.createcodeunitfolder",
-		"onCommand:alstructurecreator.createqueryfolder",
-		"onCommand:alstructurecreator.createxmlportfolder",
-		"onCommand:alstructurecreator.createenumfolder",
-		"onCommand:alstructurecreator.createactrladdinfolder",
-		"onCommand:alstructurecreator.createdotnetfolder",
-		"onCommand:alstructurecreator.reorganizeobjects"
+		"onCommand:alstructurecreator.createstructure",
+		"onCommand:alstructurecreator.reorganizefiles"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -31,128 +40,304 @@
 				"title": "ES: Create All Folder Structure"
 			},
 			{
-				"command": "alstructurecreator.createtablefolder",
-				"title": "ES: Create Table Folder"
+				"command": "alstructurecreator.createstructure",
+				"title": "ES: Create Folder Structure"
 			},
 			{
-				"command": "alstructurecreator.createpagefolder",
-				"title": "ES: Create Page Folder"
-			},
-			{
-				"command": "alstructurecreator.createreportfolder",
-				"title": "ES: Create Report Folder"
-			},
-			{
-				"command": "alstructurecreator.createcodeunitfolder",
-				"title": "ES: Create Codeunit Folder"
-			},
-			{
-				"command": "alstructurecreator.createqueryfolder",
-				"title": "ES: Create Query Folder"
-			},
-			{
-				"command": "alstructurecreator.createxmlportfolder",
-				"title": "ES: Create xmlport Folder"
-			},
-			{
-				"command": "alstructurecreator.createenumfolder",
-				"title": "ES: Create Enum Folder"
-			},
-			{
-				"command": "alstructurecreator.createactrladdinfolder",
-				"title": "ES: Create ControlAddin Folder"
-			},
-			{
-				"command": "alstructurecreator.createdotnetfolder",
-				"title": "ES: Create DotNet Folder"
-			},
-			{
-				"command": "alstructurecreator.reorganizeobjects",
-				"title": "ES: Reorganize Objects"
+				"command": "alstructurecreator.reorganizefiles",
+				"title": "ES: Reorganize Files"
 			}
 		],
-		"keybindings":[
+		"keybindings": [
 			{
 				"command": "alstructurecreator.createallstructure",
 				"key": "Alt-E+Alt-C"
 			},
 			{
-				"command": "alstructurecreator.reorganizeobjects",
+				"command": "alstructurecreator.reorganizefiles",
 				"key": "Alt-E+Alt-R"
 			}
 		],
-		"configuration":[
+		"configuration": [
 			{
 				"title": "AL Folder Structure",
 				"properties": {
-					"ALStructureCreator.AppSubfolderType": {
+					"ALStructureCreator.FoldertStructure": {
+						"type": "object",
+						"description": "This configuration allows you to define the folder structure for AL projects.",
+						"scope": "window",
+						"properties": {
+							"structure": {
+								"logo": {
+									"name": "logo",
+									"autocreate": true
+								},
+								"object": {
+									"name": "src",
+									"autocreate": true,
+									"subfolder": {
+										"codeunit": {
+											"name": "codeunit",
+											"autocreate": true
+										},
+										"controladdin": {
+											"name": "controladdins",
+											"autocreate": false
+										},
+										"dotnet": {
+											"name": "dotnet",
+											"autocreate": false
+										},
+										"entitlement": {
+											"name": "entitlement",
+											"autocreate": false
+										},
+										"enum": {
+											"name": "enum",
+											"autocreate": false,
+											"createext": false
+										},
+										"interface": {
+											"name": "interfaces",
+											"autocreate": false
+										},
+										"page": {
+											"name": "page",
+											"autocreate": true,
+											"createcust": true,
+											"createext": false
+										},
+										"permissionset": {
+											"name": "permissionset",
+											"autocreate": false,
+											"createext": false
+										},
+										"profile": {
+											"name": "profiles",
+											"autocreate": false
+										},
+										"query": {
+											"name": "query",
+											"autocreate": true
+										},
+										"report": {
+											"name": "report",
+											"autocreate": true,
+											"subfolder": {
+												"layout": {
+													"name": "layout",
+													"autocreate": true
+												}
+											}
+										},
+										"requestpage": {
+											"name": "requestpage",
+											"autocreate": false
+										},
+										"table": {
+											"name": "table",
+											"autocreate": true,
+											"createext": false
+										},
+										"xmlport": {
+											"name": "codeunit",
+											"autocreate": true
+										}
+									}
+								},
+								"permission": {
+									"name": "permissions",
+									"autocreate": true
+								},
+								"test": {
+									"name": "tests",
+									"autocreate": false
+								},
+								"translation": {
+									"name": "translations",
+									"autocreate": true
+								},
+								"webservice": {
+									"name": "webservice",
+									"autocreate": true
+								}
+							}
+						},
+						"default": {
+							"structure": {
+								"logo": {
+									"name": "logo",
+									"autocreate": true
+								},
+								"object": {
+									"name": "src",
+									"autocreate": true,
+									"subfolder": {
+										"codeunit": {
+											"name": "codeunit",
+											"autocreate": true
+										},
+										"controladdin": {
+											"name": "controladdins",
+											"autocreate": false
+										},
+										"dotnet": {
+											"name": "dotnet",
+											"autocreate": false
+										},
+										"entitlement": {
+											"name": "entitlement",
+											"autocreate": false
+										},
+										"enum": {
+											"name": "enum",
+											"autocreate": false,
+											"createext": false
+										},
+										"interface": {
+											"name": "interfaces",
+											"autocreate": false
+										},
+										"page": {
+											"name": "page",
+											"autocreate": true,
+											"createcust": true,
+											"createext": false
+										},
+										"permissionset": {
+											"name": "permissionset",
+											"autocreate": false,
+											"createext": false
+										},
+										"profile": {
+											"name": "profiles",
+											"autocreate": false
+										},
+										"query": {
+											"name": "query",
+											"autocreate": true
+										},
+										"report": {
+											"name": "report",
+											"autocreate": true,
+											"subfolder": {
+												"layout": {
+													"name": "layout",
+													"autocreate": true
+												}
+											}
+										},
+										"requestpage": {
+											"name": "requestpage",
+											"autocreate": false
+										},
+										"table": {
+											"name": "table",
+											"autocreate": true,
+											"createext": false
+										},
+										"xmlport": {
+											"name": "codeunit",
+											"autocreate": true
+										}
+									}
+								},
+								"permission": {
+									"name": "permissions",
+									"autocreate": true
+								},
+								"test": {
+									"name": "tests",
+									"autocreate": false
+								},
+								"translation": {
+									"name": "translations",
+									"autocreate": true
+								},
+								"webservice": {
+									"name": "webservice",
+									"autocreate": true
+								}
+							}
+						}
+					},
+					"ALStructureCreator.ObjectIdentification": {
 						"type": "string",
-						"default": "Numbered",
-						"enum": ["Numbered","Named","None"],
-						"enumDescriptions": ["e.g.: 01_Table","e.g.: Table",""],
-						"description": "This configuration defines which type of application/object folder you want to create."
+						"default": "Prefix",
+						"enum": [
+							"Prefix",
+							"Suffix"
+						],
+						"enumDescriptions": [
+							"e.g.: TabEmployeMgt.al",
+							"e.g.: EmployeeMgtTab.al"
+						],
+						"description": "This configuration defines how to identify the objects files, by the object filename prefix or suffix."
 					},
-					"ALStructureCreator.CreateExtObjFolder": {
-						"type": "string",
-						"default": "None",
-						"enum": ["None","Cust","Ext","Both"],
-						"enumDescriptions": ["","e.g.: TableCust","e.g.: TableExt","e.g.: TableCust, TableExt"],
-						"description": "This configuration allows you to create application subfolder for customer extensions."
-					},
-					"ALStructureCreator.CreateReportLayoutFolder": {
-						"type": "boolean",
-						"default": true,
-						"description": "This configuration allows to Layout subfolder inside report folder for the RDL objects."
-					},
-					"ALStructureCreator.ErrorOnExistFolder": {
-						"type": "boolean",
-						"default": false,
-						"description": "This configuration allows to raise an error if the folder you want to create already exists."
-					},
-					"ALStructureCreator.ObjectPrefix.Table": {
-						"type": "string",
-						"default": "Tab",
-						"description": "This configuration defines application object type table prefix."
-					},
-					"ALStructureCreator.ObjectPrefix.Page": {
-						"type": "string",
-						"default": "Pag",
-						"description": "This configuration defines application object type page prefix."
-					},
-					"ALStructureCreator.ObjectPrefix.Report": {
-						"type": "string",
-						"default": "Rep",
-						"description": "This configuration defines application object type report prefix."
-					},
-					"ALStructureCreator.ObjectPrefix.Codeunit": {
+					"ALStructureCreator.ObjectIdent.Codeunit": {
 						"type": "string",
 						"default": "Cod",
-						"description": "This configuration defines application object type codeunit prefix."
+						"description": "This configuration defines how to identify codeunit file name."
 					},
-					"ALStructureCreator.ObjectPrefix.Query": {
-						"type": "string",
-						"default": "Que",
-						"description": "This configuration defines application object type query prefix."
-					},
-					"ALStructureCreator.ObjectPrefix.XMLport": {
-						"type": "string",
-						"default": "Xml",
-						"description": "This configuration defines application object type xmlport prefix."
-					},
-					"ALStructureCreator.ObjectPrefix.Enum": {
-						"type": "string",
-						"default": "Enu",
-						"description": "This configuration defines application object type enum prefix."
-					},
-					"ALStructureCreator.ObjectPrefix.ControlAddIn": {
+					"ALStructureCreator.ObjectIdent.ControlAddin": {
 						"type": "string",
 						"default": "ControlAddin",
-						"description": "This configuration defines application object type control addin prefix."
+						"description": "This configuration defines how to identify control addin file name."
 					},
-					"ALStructureCreator.ObjectPrefix.DotNet": {
+					"ALStructureCreator.ObjectIdent.DotNet": {
 						"type": "string",
 						"default": "DotNet",
-						"description": "This configuration defines application object type .net prefix."
+						"description": "This configuration defines how to identify dotnet file name."
+					},
+					"ALStructureCreator.ObjectIdent.Entitlement": {
+						"type": "string",
+						"default": "Ent",
+						"description": "This configuration defines how to identify entitlement file name."
+					},
+					"ALStructureCreator.ObjectIdent.Enum": {
+						"type": "string",
+						"default": "Enum",
+						"description": "This configuration defines how to identify enum file name."
+					},
+					"ALStructureCreator.ObjectIdent.Interface": {
+						"type": "string",
+						"default": "Int",
+						"description": "This configuration defines how to identify interface file name."
+					},
+					"ALStructureCreator.ObjectIdent.Page": {
+						"type": "string",
+						"default": "Pag",
+						"description": "This configuration defines how to identify page file name."
+					},
+					"ALStructureCreator.ObjectIdent.PermissionSet": {
+						"type": "string",
+						"default": "PermissionSet",
+						"description": "This configuration defines how to identify permission set file name."
+					},
+					"ALStructureCreator.ObjectIdent.Profile": {
+						"type": "string",
+						"default": "Profile",
+						"description": "This configuration defines how to identify profile file name."
+					},
+					"ALStructureCreator.ObjectIdent.Query": {
+						"type": "string",
+						"default": "Que",
+						"description": "This configuration defines how to identify query file name."
+					},
+					"ALStructureCreator.ObjectIdent.Report": {
+						"type": "string",
+						"default": "Rep",
+						"description": "This configuration defines how to identify report file name."
+					},
+					"ALStructureCreator.ObjectIdent.RequestPage": {
+						"type": "string",
+						"default": "Req",
+						"description": "This configuration defines how to identify requestpage file name."
+					},
+					"ALStructureCreator.ObjectIdent.Table": {
+						"type": "string",
+						"default": "Tab",
+						"description": "This configuration defines how to identify table file name."
 					}
 				}
 			}
@@ -168,17 +353,16 @@
 	"devDependencies": {
 		"@types/glob": "^7.1.1",
 		"@types/mocha": "^5.2.7",
-		"@types/node": "^12.11.7",
+		"@types/node": "^12.20.16",
 		"@types/vscode": "^1.41.0",
 		"glob": "^7.1.5",
 		"mocha": "^6.2.2",
-		"typescript": "^3.6.4",
 		"tslint": "^5.20.0",
+		"typescript": "^3.6.4",
 		"vscode-test": "^1.2.2"
 	},
 	"repository": {
-        "type": "git",
-        "url": "https://github.com/edyspider/ALStructureCreator"
-    },
-    "icon": "icon.png"
+		"type": "git",
+		"url": "https://github.com/edyspider/ALStructureCreator"
+	}
 }

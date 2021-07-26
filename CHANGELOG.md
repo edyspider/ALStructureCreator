@@ -3,6 +3,17 @@
 All notable changes to the **AL Structure Creator** extension will be documented in this file.
 
 ----
+### 0.3.0
+#### Added
+- New configuration in json format that allows to customize the default al folder structure.
+- Add general action to create specific folder.
+- Add configurations to identify type of object/files.
+
+#### Removed
+- Discontinued configurations because of the newly added configuration.
+- Removed actions regarding creating specific object folders.
+
+----
 ### 0.2.0
 #### Added
 - New configuration and functionality that allows to create a Layout folder inside application folder Report for all the RDL/RDLC files.

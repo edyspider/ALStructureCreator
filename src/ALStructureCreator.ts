@@ -5,8 +5,8 @@ import * as vscode from 'vscode';
 import { InputBoxOptions } from "vscode";
 import { IDisposable } from './disposable.interface';
 import { VSCodeWindow } from './vscode.interfaces';
-import { ALSCExistError } from './errors/al-sc-exist.error';
-import { FolderSettings } from './FolderSettings';
+import { ALFolderExistsError } from './errors/al-folder-exists.error';
+import { StructureSettings } from './StructureSettings';
 
 export class ALStructureCreator implements IDisposable {
   constructor(
@@ -15,302 +15,595 @@ export class ALStructureCreator implements IDisposable {
   ) { }
   
   async execute(): Promise<void> {
-    this.create();
+    var rootPath = StructureSettings.GetStructureRootPath();
+    this.createAllFolderStructure(rootPath,"");
+
+    this.window.showInformationMessage(`ALStructureCreator: Create All Folder Structure Executed`);
   }
 
-  async prompt(): Promise<string | undefined> {
-    // this can be abstracted out as an argument for prompt
+  async addNewFolder(): Promise<void> {
+    let forldersName: string[] = ["table", "page", "codeunit", "report", "xmlport", "interface", "enum", "entitlement", "dotnet", "permissions", "translations"];
+    const rndInt = Math.floor(Math.random() * 11) + 1;
+
     const options: InputBoxOptions = {
       ignoreFocusOut: true,
-      prompt: `AL folder name: 'AlProject', or a relative path: 'AlProject'`,
-      placeHolder: 'AlProject',
+      prompt: 'Write the key name of the new folder',
+      placeHolder: forldersName[rndInt],
       validateInput: this.validate
     };
 
-    return await this.window.showInputBox(options);
+    var newFolder = <string>await this.window.showInputBox(options);
+    var rootPath = StructureSettings.GetStructureRootPath();
+
+    if(newFolder !== "") {
+      this.createFolderStructure(newFolder,rootPath,'');
+    }
+
+    this.window.showInformationMessage(`ALStructureCreator: Create Folder Structure Executed`);
   }
-  
-  create() {
-    let absoluteALFolderPath = this.toAbsolutePath("");
+
+  createAllFolderStructure(folder: string, subdir: string) {
+    let folderProp = StructureSettings.GetFolderProperties().getFolderProperties();
+
+    if(vscode.workspace.getConfiguration().get(folder)) {
+      let inspect;
+      if(!vscode.workspace.getConfiguration().inspect(folder)?.globalValue) {
+        inspect = vscode.workspace.getConfiguration().inspect(folder)?.defaultValue;
+      } else {
+        inspect = vscode.workspace.getConfiguration().inspect(folder)?.globalValue;
+      }
+
+      let hasFolders: boolean = false;
+      hasFolders = (<boolean>inspect);
+
+      if(hasFolders) {
+        var obj;
+        obj = JSON.parse(JSON.stringify(inspect));
+
+        for(var index in obj) {
+          var root = JSON.parse(JSON.stringify(index));
+          let folderName: string = "";
+          let autoCreate: boolean = false;
+          var folderDir;
+
+          // check root folders properties
+          const rootPath = this.appendProp(folder,root);
+          var inspectRoot;
+          if(!vscode.workspace.getConfiguration().inspect(rootPath)?.globalValue) {
+            inspectRoot = vscode.workspace.getConfiguration().inspect(rootPath)?.defaultValue;
+          } else {
+            inspectRoot = vscode.workspace.getConfiguration().inspect(rootPath)?.globalValue;
+          }
+
+          // check auto-create
+          const autoCreatePath = this.appendProp(rootPath,folderProp.create);
+          if (vscode.workspace.getConfiguration().has(autoCreatePath)) {
+            autoCreate = (<boolean>vscode.workspace.getConfiguration().get(autoCreatePath));
+          }
+
+          if(autoCreate) {
+            // check name
+            const folderPath = this.appendProp(rootPath,folderProp.name);
+            if (vscode.workspace.getConfiguration().has(folderPath)) {
+              folderName = `${vscode.workspace.getConfiguration().get(folderPath)}`;
+              
+              try {
+                let absolutePath = this.toAbsolutePath(subdir);
+                folderDir = path.join(absolutePath, folderName);
+
+                if(!fs.existsSync(folderDir)) {
+                  fs.mkdirSync(`${folderDir}`);
+                } else {
+                  throw new ALFolderExistsError(`Folder '${folderName}' already exists.`);
+                }
+              } catch (err) {
+                console.log(`Error: ${err.message}`);
+              }
+            }
+          }
+
+          // check sub-folders
+          const subFolderPath = this.appendProp(rootPath,folderProp.subfolder);
+          if (vscode.workspace.getConfiguration().has(subFolderPath)) {
+            if (subdir !== "") {
+              this.createAllFolderStructure(subFolderPath,path.join(subdir, folderName));
+            } else {
+              this.createAllFolderStructure(subFolderPath,folderName);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  createFolderStructure(newFolderKey: string, folder: string, subdir: string) {
+    let rootEnum = StructureSettings.GetStructureProperties().getRootEnum();
+    let objEnum = StructureSettings.GetStructureProperties().getObjectEnum();
+    var newFolderDir: string = "";
+
+    switch(newFolderKey.toLocaleLowerCase()) {
+      case "cod":
+      case "codeunit":
+        newFolderDir = this.getFolderTypePath(objEnum.codeunit);
+        break;
+      case "ctrl":
+      case "controladdin":
+        newFolderDir = this.getFolderTypePath(objEnum.controladdin);
+        break;
+      case "dnet":
+      case "dotnet":
+        newFolderDir = this.getFolderTypePath(objEnum.dotnet);
+        break;
+      case "ent":
+      case "entitlement":
+        newFolderDir = this.getFolderTypePath(objEnum.entitlement);
+        break;
+      case "enu":
+      case "enum":
+        newFolderDir = this.getFolderTypePath(objEnum.enum);
+        break;
+      case "int":
+      case "interface":
+        newFolderDir = this.getFolderTypePath(objEnum.interface);
+        break;
+      case "lay":
+      case "layout":
+        newFolderDir = this.getFolderTypePath(objEnum.layout);
+        break;
+      case "pag":
+      case objEnum.page:
+        newFolderDir = this.getFolderTypePath(objEnum.page);
+        break;
+      case "pers":
+      case "permissionset":
+        newFolderDir = this.getFolderTypePath(objEnum.permissionset);
+        break;
+      case "pro":
+      case "profile":
+        newFolderDir = this.getFolderTypePath(objEnum.profile);
+        break;
+      case "que":
+      case "query":
+        newFolderDir = this.getFolderTypePath(objEnum.query);
+        break;
+      case "rep":
+      case "report":
+        newFolderDir = this.getFolderTypePath(objEnum.report);
+        break;
+      case "req":
+      case "requestpage":
+        newFolderDir = this.getFolderTypePath(objEnum.requestpage);
+        break;
+      case "tab":
+      case "table":
+        newFolderDir = this.getFolderTypePath(objEnum.table);
+        break;
+      case "xml":
+      case "xmlport":
+        newFolderDir = this.getFolderTypePath(objEnum.xmlport);
+        break;
+      case rootEnum.logo:
+        newFolderDir = this.getFolderTypePath(rootEnum.logo);
+        break;
+      case "src":
+      case "obj":
+      case rootEnum.object:
+        newFolderDir = this.getFolderTypePath(rootEnum.object);
+        break;
+      case "perm":
+      case rootEnum.permission:
+        newFolderDir = this.getFolderTypePath(rootEnum.permission);
+        break;
+      case "tst":
+      case rootEnum.test:
+        newFolderDir = this.getFolderTypePath(rootEnum.test);
+        break;
+      case "tran":
+      case rootEnum.translation:
+        newFolderDir = this.getFolderTypePath(rootEnum.translation);
+        break;
+      case "web":
+      case rootEnum.webservice:
+        newFolderDir = this.getFolderTypePath(rootEnum.webservice);
+        break;
+    }
 
     try {
-      const folders: string[] = FolderSettings.GetProjectFolders();
-      const appSubFolders: string[] = FolderSettings.GetAppSubfolders();
-      const validateFolder: Boolean = FolderSettings.ValidateFolderBeforeCreate();
-      const repFolderName = FolderSettings.ReportFolder();
-      const layoutFolderName = FolderSettings.ReportLayoutFolder();
-      const createRepLayoutFolder: Boolean = FolderSettings.CreateLayoutSubfolder();
-
-      folders.forEach((folder: string) => {
-        const foldername = `${folder}`;
-        const fullpath = path.join(absoluteALFolderPath, foldername);
-        
-        if(validateFolder){
-          if(!fs.existsSync(fullpath)) {
-            fs.mkdirSync(fullpath);
-          }
+      if(newFolderDir !== "") {
+        if(!fs.existsSync(newFolderDir)) {
+          fs.mkdirSync(newFolderDir, { recursive: true });
+          console.log(`Folder ${newFolderDir} created`);
         } else {
-          if(fs.existsSync(fullpath)) {
-            throw new ALSCExistError(`'${folder}' already exists`);
-          }
-          fs.mkdirSync(fullpath);
+          throw new ALFolderExistsError(`Folder '${newFolderKey}' already exists`);
         }
+      }
+    } catch (err) {
+      if (err instanceof ALFolderExistsError) {
+        this.window.showErrorMessage(`ALStructureCreator Error: '${err.message}'.`);
+      } else {
+        this.window.showErrorMessage(`Error: ${err.message}`);
+      }
+    }
+  }
 
-        if (FolderSettings.CreateAppSubfolders()) {
-          if(folder===FolderSettings.GetAppFolder()) {
-            appSubFolders.forEach((subFolder: string) => {
-              const subfoldername = `${subFolder}`;
-              const fullsubpath = path.join(fullpath, subfoldername);
+  reorganizeAppFiles() {
+    var folderLogo = this.getFolderTypePath('logo');
+    var folderCodeunit = this.getFolderTypePath('codeunit');
+    var folderControlAddin = this.getFolderTypePath('controladdin');
+    var folderDotNet = this.getFolderTypePath('dotnet');
+    var folderEntitlement = this.getFolderTypePath('entitlement');
+    var folderEnum = this.getFolderTypePath('enum');
+    var folderInterface = this.getFolderTypePath('interface');
+    var folderPage = this.getFolderTypePath('page');
+    var folderPermissionSet = this.getFolderTypePath('permissionset');
+    var folderProfile = this.getFolderTypePath('profile');
+    var folderQuery = this.getFolderTypePath('query');
+    var folderReport = this.getFolderTypePath('report');
+    var folderLayout = this.getFolderTypePath('layout');
+    var folderRequestPage = this.getFolderTypePath('requestpage');
+    var folderTable = this.getFolderTypePath('table');
+    var folderXmlport = this.getFolderTypePath('xmlport');
+    //var folderPermission = this.getFolderTypePath('permission');
+    var folderTranslation = this.getFolderTypePath('translation');
+    //var folderWebService = this.getFolderTypePath('webservice');
 
-              if(validateFolder) {
-                if(!fs.existsSync(fullsubpath)) {
-                  fs.mkdirSync(fullsubpath);
-                }
-              }  else {
-                if(fs.existsSync(fullsubpath)) {
-                  throw new ALSCExistError(`App subfolder '${subFolder}' already exists`);
-                }
-                fs.mkdirSync(fullsubpath);
+    var fileExt = StructureSettings.GetFileExtensions().getFileExtensons();
+    var objTypeName = StructureSettings.GetObjectsIdent().getObjectIdents();
+    var handled: boolean;
+
+    const objIdentCodeunit = objTypeName.codeunit;
+    const objIdentControlAddin = objTypeName.controladdin;
+    const objIdentDotNet = objTypeName.dotnet;
+    const objIdentEntitlement = objTypeName.entitlement;
+    const objIdentEnum = objTypeName.enum;
+    const objIdentInterface = objTypeName.interface;
+    const objIdentPage = objTypeName.page;
+    const objIdentPermissionSet = objTypeName.permissionset;
+    const objIdentProfile = objTypeName.profile;
+    const objIdentQuery = objTypeName.query;
+    const objIdentReport = objTypeName.report;
+    const objIdentRequestPage = objTypeName.requestpage;
+    const objIdentTable = objTypeName.table;
+    const objIdentXmlport = objTypeName.xmlport;
+
+    const rootFolder = this.toAbsolutePath('');
+    const objIdent = StructureSettings.GetobjIdentification();
+
+    try {
+      fs.readdirSync(rootFolder).forEach(file => {
+        handled = false;
+        var fileNameLength = file.length;
+        switch(objIdent) {
+          case "Prefix":
+            // --> PermissionSet.xml files
+            if(file.split('.').pop() === fileExt.xml) {
+              if(file.startsWith(objIdentPermissionSet)) {
+                this.syncFolderPath(folderPermissionSet);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderPermissionSet, path.basename(file)));
+              }
+            }
+            
+            // AL files
+            if(file.split('.').pop() === fileExt.al) {
+              // --> Codeunit
+              if(file.startsWith(objIdentCodeunit)) {
+                this.syncFolderPath(folderCodeunit);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderCodeunit, path.basename(file)));
               }
 
-              if((subfoldername===repFolderName) && (createRepLayoutFolder)) {
-                const layoutFolderPath = path.join(fullsubpath,layoutFolderName);
-                if(validateFolder) {
-                  if(!fs.existsSync(layoutFolderPath)) {
-                    fs.mkdirSync(layoutFolderPath);
-                  }
-                }  else {
-                  if(fs.existsSync(layoutFolderPath)) {
-                    throw new ALSCExistError(`App subfolder '${layoutFolderName}' already exists`);
-                  }
-                  fs.mkdirSync(layoutFolderPath);
-                }
+              // --> ControlAddin
+              if(file.startsWith(objIdentControlAddin)) {
+                this.syncFolderPath(folderControlAddin);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderControlAddin, path.basename(file)));
+              }
+
+              // --> DotNet
+              if(file.startsWith(objIdentDotNet)) {
+                this.syncFolderPath(folderDotNet);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderDotNet, path.basename(file)));
+              }
+
+              // --> Entitlement
+              if(file.startsWith(objIdentEntitlement)) {
+                this.syncFolderPath(folderEntitlement);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderEntitlement, path.basename(file)));
+              }
+
+              // --> Enum
+              if(file.startsWith(objIdentEnum)) {
+                this.syncFolderPath(folderEnum);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderEnum, path.basename(file)));
+              }
+
+              // --> Interface
+              if(file.startsWith(objIdentInterface)) {
+                this.syncFolderPath(folderInterface);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderInterface, path.basename(file)));
+              }
+
+              // --> Page
+              if(file.startsWith(objIdentPage)) {
+                this.syncFolderPath(folderPage);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderPage, path.basename(file)));
+              }
+
+              // --> Profile
+              if(file.startsWith(objIdentProfile)) {
+                this.syncFolderPath(folderProfile);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderProfile, path.basename(file)));
+              }
+
+              // --> Query
+              if(file.startsWith(objIdentQuery)) {
+                this.syncFolderPath(folderQuery);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderQuery, path.basename(file)));
+              }
+
+              // --> Report
+              if(file.startsWith(objIdentReport)) {
+                this.syncFolderPath(folderReport);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderReport, path.basename(file)));
+              }
+
+              // --> RequestPage
+              if(file.startsWith(objIdentRequestPage)) {
+                this.syncFolderPath(folderRequestPage);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderRequestPage, path.basename(file)));
+              }
+
+              // --> Table
+              if(file.startsWith(objIdentTable)) {
+                this.syncFolderPath(folderTable);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderTable, path.basename(file)));
+              }
+
+              // --> Xmlport
+              if(file.startsWith(objIdentXmlport)) {
+                this.syncFolderPath(folderXmlport);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderXmlport, path.basename(file)));
+              }
+            }
+            break;
+          case "Suffix":
+            // PermissionSet.xml files
+            if(file.split('.').pop() === fileExt.xml) {
+              if(file.endsWith(objIdentPermissionSet,(fileNameLength-4))) {
+                this.syncFolderPath(folderPermissionSet);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderPermissionSet, path.basename(file)));
+              }
+            }
+
+            // AL files
+            if(file.split('.').pop() === fileExt.al) {
+              // --> Codeunit
+              if(file.endsWith(objIdentCodeunit,(fileNameLength-3))) {
+                this.syncFolderPath(folderCodeunit);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderCodeunit, path.basename(file)));
+              }
+
+              // --> ControlAddin
+              if(file.endsWith(objIdentControlAddin,(fileNameLength-3))) {
+                this.syncFolderPath(folderControlAddin);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderControlAddin, path.basename(file)));
+              }
+
+              // --> DotNet
+              if(file.endsWith(objIdentDotNet,(fileNameLength-3))) {
+                this.syncFolderPath(folderDotNet);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderDotNet, path.basename(file)));
+              }
+
+              // --> Entitlement
+              if(file.endsWith(objIdentEntitlement,(fileNameLength-3))) {
+                this.syncFolderPath(folderEntitlement);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderEntitlement, path.basename(file)));
+              }
+
+              // --> Enum
+              if(file.endsWith(objIdentEnum,(fileNameLength-3))) {
+                this.syncFolderPath(folderEnum);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderEnum, path.basename(file)));
+              }
+
+              // --> Interface
+              if(file.endsWith(objIdentInterface,(fileNameLength-3))) {
+                this.syncFolderPath(folderInterface);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderInterface, path.basename(file)));
+              }
+
+              // --> Page
+              if(file.endsWith(objIdentPage,(fileNameLength-3))) {
+                this.syncFolderPath(folderPage);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderPage, path.basename(file)));
+              }
+
+              // --> Profile
+              if(file.endsWith(objIdentProfile,(fileNameLength-3))) {
+                this.syncFolderPath(folderProfile);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderProfile, path.basename(file)));
+              }
+
+              // --> Query
+              if(file.endsWith(objIdentQuery,(fileNameLength-3))) {
+                this.syncFolderPath(folderQuery);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderQuery, path.basename(file)));
+              }
+
+              // --> Report
+              if(file.endsWith(objIdentReport,(fileNameLength-3))) {
+                this.syncFolderPath(folderReport);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderReport, path.basename(file)));
+              }
+
+              // --> RequestPage
+              if(file.endsWith(objIdentRequestPage,(fileNameLength-3))) {
+                this.syncFolderPath(folderRequestPage);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderRequestPage, path.basename(file)));
+              }
+
+              // --> Table
+              if(file.endsWith(objIdentTable,(fileNameLength-3))) {
+                this.syncFolderPath(folderTable);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderTable, path.basename(file)));
+              }
+
+              // --> Xmlport
+              if(file.endsWith(objIdentXmlport,(fileNameLength-3))) {
+                this.syncFolderPath(folderXmlport);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderXmlport, path.basename(file)));
+              }
+            }
+            break;
+          case "Object":
+            //const readLine = fs.readFileSync(file,'UTF-8');
+            fs.readFile(file, function(err, data) {
+              if(err) {throw err;}
+
+              const arr = data.toString().replace(/\r\n/g,'\n').split('\n');
+
+              for(let i of arr) {
+                console.log(i);
               }
             });
-          }
+            //const searchTerm = 'Object';
+            //const indexOfFirst = paragraph.indexOf(searchTerm);
+            break;
+        }
+        
+        // --> DOCX, RDL, RDLC & XLSX files
+        if((file.split('.').pop() === fileExt.docx) || (file.split('.').pop() === fileExt.rdl) || (file.split('.').pop() === fileExt.rdlc) || (file.split('.').pop() === fileExt.xlsx)) {
+          this.syncFolderPath(folderLayout);
+          fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderLayout, path.basename(file)));
+        }
+
+        // --> GIF, ICON, JPG & PNG files
+        if((file.split('.').pop() === fileExt.gif) || (file.split('.').pop() === fileExt.icon) || (file.split('.').pop() === fileExt.jpg) || (file.split('.').pop() === fileExt.png)) {
+          this.syncFolderPath(folderLogo);
+          fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderLogo, path.basename(file)));
+        }
+
+        // --> Translation.xlf files
+        if(file.split('.').pop() === fileExt.xlf) {
+          this.syncFolderPath(folderTranslation);
+          fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderTranslation, path.basename(file)));
         }
       });
-
-      this.window.showInformationMessage(`ALStructureCreator: AL Folder Structure created.`);
     } catch (err) {
-      if (err instanceof ALSCExistError) {
+      if (err instanceof ALFolderExistsError) {
         this.window.showErrorMessage(`ALStructureCreator Error: '${err.message}'.`);
       } else {
         this.window.showErrorMessage(`Error: ${err.message}`);
       }
     }
+
+    this.window.showInformationMessage(`ALStructureCreator: Reorganize App Files Executed`);
   }
 
-  createFolder(appObjectFolder: string) {
-    const appFolder = this.toAbsolutePath(FolderSettings.GetAppFolder());
-    const validateFolder: Boolean = FolderSettings.ValidateFolderBeforeCreate();
-    let appFullpath = '';
-
-    try {
-      if (!fs.existsSync(appFolder)) {
-        fs.mkdirSync(appFolder);
-      }
-
-      switch(appObjectFolder) {
-        case FolderSettings.TableFolder():
-          appFullpath = path.join(appFolder, FolderSettings.TableFolder());
-          break;
-        case FolderSettings.PageFolder():
-          appFullpath = path.join(appFolder, FolderSettings.PageFolder());
-          break;
-        case FolderSettings.ReportFolder():
-          appFullpath = path.join(appFolder, FolderSettings.ReportFolder());
-          break;
-        case FolderSettings.CodeunitFolder():
-          appFullpath = path.join(appFolder, FolderSettings.CodeunitFolder());
-          break;
-        case FolderSettings.QueryFolder():
-          appFullpath = path.join(appFolder, FolderSettings.QueryFolder());
-          break;
-        case FolderSettings.XMLportFolder():
-          appFullpath = path.join(appFolder, FolderSettings.XMLportFolder());
-          break;
-        case FolderSettings.EnumFolder():
-          appFullpath = path.join(appFolder, FolderSettings.EnumFolder());
-          break;
-        case FolderSettings.CtrlAddinFolder():
-          appFullpath = path.join(appFolder, FolderSettings.CtrlAddinFolder());
-          break;
-        case FolderSettings.DotNetFolder():
-          appFullpath = path.join(appFolder, FolderSettings.DotNetFolder());
-          break;
-        default:
-          this.window.showErrorMessage(`ALStructureCreator Error: Create application folder invalid.`);
-          return;
-          break;
-      }
-
-      if(validateFolder) {
-        if(!fs.existsSync(appFullpath)) {
-          fs.mkdirSync(appFullpath);
-        }
-      } else {
-        if(fs.existsSync(appFullpath)) {
-          throw new ALSCExistError(`App subfolder '${appObjectFolder}' already exists`);
-        }
-        fs.mkdirSync(appFullpath);
-      }
-
-      this.window.showInformationMessage(`ALStructureCreator: Application/Object folder ` + appObjectFolder + ` successfully created`);
-    } catch (err) {
-      if (err instanceof ALSCExistError) {
-        this.window.showErrorMessage(`ALStructureCreator Error: '${err.message}'.`);
-      } else {
-        this.window.showErrorMessage(`Error: ${err.message}`);
-      }
-    }
-  }
-
-  reorganizeAppObjects() {
-    const rootFolder = this.toAbsolutePath('');
-    const appFolder = this.toAbsolutePath(FolderSettings.GetAppFolder());
-    const transFolder = this.toAbsolutePath(FolderSettings.TranslationFolder());
-    const permFolder = this.toAbsolutePath(FolderSettings.PermissionFolder());
-
-    const tabFolder = path.join(appFolder, FolderSettings.TableFolder());
-    const pagFolder = path.join(appFolder, FolderSettings.PageFolder());
-    const repFolder = path.join(appFolder, FolderSettings.ReportFolder());
-    const codFolder = path.join(appFolder, FolderSettings.CodeunitFolder());
-    const queFolder = path.join(appFolder, FolderSettings.QueryFolder());
-    const xmlFolder = path.join(appFolder, FolderSettings.XMLportFolder());
-    const enuFolder = path.join(appFolder, FolderSettings.EnumFolder());
-    const cddFolder = path.join(appFolder, FolderSettings.CtrlAddinFolder());
-    const dntFolder = path.join(appFolder, FolderSettings.DotNetFolder());
-    let layoutFolder = "";
-    
-    if (FolderSettings.CreateLayoutSubfolder()) {
-      layoutFolder = path.join(repFolder, FolderSettings.ReportLayoutFolder());
+  getFolderTypePath(folderType: string): string {
+    var folderLevels: string[] = [];
+    var folder = StructureSettings.GetStructureRootPath();
+    var folderPath: FolderType = {currentFolder:folder, folderFound: false};
+    folderPath = this.searchFolderTypePath(folderType,folder,0,folderLevels,folderPath);
+    if(folderPath.folderFound) {
+      return folderPath.currentFolder;
     } else {
-      layoutFolder = repFolder;
+      return '';
     }
+  }
 
-    const rdlExt = FolderSettings.GetRdlExtension();
-    const rdlcExt = FolderSettings.GetRdlcExtension();
-    const translExt = FolderSettings.GetTranslationExtension();
-    const permFileName = FolderSettings.GetExtPermissionName();
+  searchFolderTypePath(folderType: string, folder:string, level: number, folderLevels: string[], currFolderType: FolderType): FolderType {
+    let folderProp = StructureSettings.GetFolderProperties().getFolderProperties();
+    //var currFolder: string = '';
 
-    try {
-      let iCountTab: number = 0;
-      let iCountPag: number = 0;
-      let iCountRep: number = 0;
-      let iCountCod: number = 0;
-      let iCountQue: number = 0;
-      let iCountXml: number = 0;
-      let iCountEnu: number = 0;
-      let iCountCdd: number = 0;
-      let iCountDnt: number = 0;
-      let iCountPerm: number = 0;
-      let iCountTran: number = 0;
-      let iCountLay: number = 0;
-      let iCountTotalt: number = 0;
-
-      fs.readdirSync(rootFolder).forEach(file => {
-        console.log(file);
-        if(file.slice(-4) === '.xlf') {
-          console.log('Translation file: ' + file);
-        }
-
-        // AL files
-        if((file.indexOf('.') !== 0) && (file.slice(-3) === '.al')) {
-          // <--> Table
-          if(file.startsWith((FolderSettings.GetAppPrefixTable()))) {
-            fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(tabFolder, path.basename(file)));
-            iCountTab += 1;
-          }
-          // <--> Page
-          if(file.startsWith((FolderSettings.GetAppPrefixPage()))) {
-            fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(pagFolder, path.basename(file)));
-            iCountPag += 1;
-          }
-          // <--> Report
-          if(file.startsWith((FolderSettings.GetAppPrefixReport()))) {
-            fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(repFolder, path.basename(file)));
-            iCountRep += 1;
-          }
-          // <--> Codeunit
-          if(file.startsWith((FolderSettings.GetAppPrefixCodeunit()))) {
-            fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(codFolder, path.basename(file)));
-            iCountCod += 1;
-          }
-          // <--> Query
-          if(file.startsWith((FolderSettings.GetAppPrefixQuery()))) {
-            fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(queFolder, path.basename(file)));
-            iCountQue += 1;
-          }
-          // <--> XMLport
-          if(file.startsWith((FolderSettings.GetAppPrefixXMLport()))) {
-            fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(xmlFolder, path.basename(file)));
-            iCountXml += 1;
-          }
-          // <--> Enum
-          if(file.startsWith((FolderSettings.GetAppPrefixEnum()))) {
-            fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(enuFolder, path.basename(file)));
-            iCountEnu += 1;
-          }
-          // <--> Control Addin
-          if(file.startsWith((FolderSettings.GetAppPrefixCtrlAddin()))) {
-            fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(cddFolder, path.basename(file)));
-            iCountCdd += 1;
-          }
-          // <--> DotNet
-          if(file.startsWith((FolderSettings.GetAppPrefixDotNet()))) {
-            fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(dntFolder, path.basename(file)));
-            iCountDnt += 1;
-          }
-        }
-
-        // Permission file
-        if((file.indexOf('.') !== 0) && (file.match(permFileName))) { // && (file.slice(-4) === '.xml')
-          fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(permFolder, path.basename(file)));
-          iCountPerm += 1;
-        }
-
-        // RDL and RDLC files
-        if((file.indexOf('.') !== 0) && ((file.slice(-4) === rdlExt) || (file.slice(-5) === rdlcExt))) {
-          fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(layoutFolder, path.basename(file)));
-          iCountLay += 1;
-        }
-
-        // Translation files
-        if((file.indexOf('.') !== 0) && (file.slice(-4) === translExt)) {
-          fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(transFolder, path.basename(file)));
-          iCountTran += 1;
-        }
-      });
-
-      iCountTotalt=iCountTab+iCountPag+iCountRep+iCountCod+iCountQue+iCountXml+iCountEnu+iCountCdd+iCountDnt+iCountPerm+iCountTran+iCountLay;
-
-      console.log('ALStructureCreator: Reorganize Application Folder Status');
-      console.log(' * Table........',iCountTab);
-      console.log(' * Page.........',iCountPag);
-      console.log(' * Report.......',iCountRep);
-      console.log(' * Layout.......',iCountLay);
-      console.log(' * Codeunit.....',iCountCod);
-      console.log(' * Query........',iCountQue);
-      console.log(' * XMLport......',iCountXml);
-      console.log(' * Enum.........',iCountEnu);
-      console.log(' * CtrlAddin....',iCountCdd);
-      console.log(' * DotNet.......',iCountDnt);
-      console.log(' * Permission...',iCountDnt);
-      console.log(' * Translation..',iCountDnt);
-      console.log(' ');
-      console.log(' * Total.......',iCountTotalt);
-
-      this.window.showInformationMessage(`ALStructureCreator: Reorganization finished. Total moved files: `+iCountTotalt);
-    } catch (err) {
-      if (err instanceof ALSCExistError) {
-        this.window.showErrorMessage(`ALStructureCreator Error: '${err.message}'.`);
+    if(vscode.workspace.getConfiguration().get(folder)) {
+      let inspect;
+      if(!vscode.workspace.getConfiguration().inspect(folder)?.globalValue) {
+        inspect = vscode.workspace.getConfiguration().inspect(folder)?.defaultValue;
       } else {
-        this.window.showErrorMessage(`Error: ${err.message}`);
+        inspect = vscode.workspace.getConfiguration().inspect(folder)?.globalValue;
+      }
+
+      var rootFolder = this.toAbsolutePath('');
+      switch(level) {
+        case 1:
+          rootFolder = path.join(rootFolder, folderLevels[0]);
+          break;
+        case 2:
+          rootFolder = path.join(rootFolder, folderLevels[0]);
+          rootFolder = path.join(rootFolder, folderLevels[1]);
+          break;
+        case 3:
+          rootFolder = path.join(rootFolder, folderLevels[0]);
+          rootFolder = path.join(rootFolder, folderLevels[1]);
+          rootFolder = path.join(rootFolder, folderLevels[2]);
+          break;
+        case 4:
+          rootFolder = path.join(rootFolder, folderLevels[0]);
+          rootFolder = path.join(rootFolder, folderLevels[1]);
+          rootFolder = path.join(rootFolder, folderLevels[2]);
+          rootFolder = path.join(rootFolder, folderLevels[3]);
+          break;
+      }
+      currFolderType.currentFolder = rootFolder;
+      
+
+      var obj = JSON.parse(JSON.stringify(inspect));
+      for(var index in obj) {
+        var root = JSON.parse(JSON.stringify(index));
+        let folderName: string = "";
+
+        // check root folders properties
+        const rootPath = this.appendProp(folder,root);
+        var inspectRoot;
+        if(!vscode.workspace.getConfiguration().inspect(rootPath)?.globalValue) {
+          inspectRoot = vscode.workspace.getConfiguration().inspect(rootPath)?.defaultValue;
+        } else {
+          inspectRoot = vscode.workspace.getConfiguration().inspect(rootPath)?.globalValue;
+        }
+            
+        // check name
+        const configPath = this.appendProp(rootPath,folderProp.name);
+        if (vscode.workspace.getConfiguration().has(configPath)) {
+          folderName = `${vscode.workspace.getConfiguration().get(configPath)}`;
+
+          if (folderType === root) {
+            currFolderType.folderFound = true;
+            currFolderType.currentFolder = path.join(rootFolder, folderName);
+            folderLevels[level] = folderName;
+            return currFolderType;
+          }
+        }
+
+        // check sub-folders
+        const subConfigPath = this.appendProp(rootPath,folderProp.subfolder);
+        if (vscode.workspace.getConfiguration().has(subConfigPath)) {
+          folderLevels[level] = folderName;
+          level += 1;
+          currFolderType = this.searchFolderTypePath(folderType,subConfigPath,level,folderLevels,currFolderType);
+
+          if(currFolderType.folderFound) {
+            return currFolderType;
+          }
+        }
       }
     }
+    return currFolderType;
   }
   
+  syncFolderPath(folderPath: string) {
+    try {
+      if(!fs.existsSync(folderPath)) {
+        fs.mkdirSync(`${folderPath}`);
+      }
+    } catch (err) {
+      if (err instanceof ALFolderExistsError) {
+        this.window.showErrorMessage(`ALStructureCreator Error: '${err.message}'.`);
+      } else {
+        this.window.showErrorMessage(`Error: ${err.message}`);
+      }
+    }
+  }
+
   validate(name: string): string | null {
     if (!name) {
       return 'Name is required';
@@ -340,7 +633,15 @@ export class ALStructureCreator implements IDisposable {
   }
 
   dispose(): void {
-      console.log('disposing...');
+      console.log('Disposing "al-structure-creator". See you soon...');
   }
 
+  appendProp(current: string, property: string): string {
+    return (current+'.'+property);
+  }
 }
+
+type FolderType = {
+  currentFolder: string;
+  folderFound: boolean;
+};
