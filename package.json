@@ -9,7 +9,7 @@
 		"url": "https://github.com/edyspider",
 		"email": "dev@edyspider.com"
 	},
-	"version": "0.3.1",
+	"version": "0.3.2",
 	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/edyspider/ALStructureCreator/issues"
@@ -60,7 +60,7 @@
 		],
 		"configuration": [
 			{
-				"title": "AL Folder Structure",
+				"title": "AL Structure Creator",
 				"properties": {
 					"ALStructureCreator.FolderStructure": {
 						"type": "object",

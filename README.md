@@ -54,6 +54,42 @@ The **ObjectIdent**/**ObjectIdentification.** settings are used for the action t
 
 ---
 
+## Customization
+
+You can add your own structure to the default settings but it's important that you follow the existing properties as it is.
+<table>
+  <tr>
+    <th>Property</th>
+    <th>Example</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>Folder Key</td>
+    <td>doc</td>
+    <td>Key name of the folder</td>
+  </tr>
+  <tr>
+    <td>Name</td>
+    <td>--docs</td>
+    <td>Name of the folder when created</td>
+  </tr>
+  <tr>
+    <td>Auto-Carete</td>
+    <td>--true</td>
+    <td>To automatically create the folder when call "Create All Folder Structure" command</td>
+  </tr>
+  <tr>
+    <td>Subfolder</td>
+    <td>--subfolder</td>
+    <td>To add subfolders inside the main folder</td>
+  </tr>
+</table>
+
+![ALStructureCreator-StructureSettings](images/FolderStructureSettings.png)
+![ALStructureCreator-NewStructureSettings](images/NewStructureSettings.png)
+
+---
+
 ## Extension Commands
 
 This extension contributes the following commands:
