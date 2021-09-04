@@ -97,7 +97,7 @@ export class ALStructureCreator implements IDisposable {
                   throw new ALFolderExistsError(`Folder '${folderName}' already exists.`);
                 }
               } catch (err) {
-                console.log(`Error: ${err.message}`);
+                console.log(`Error: ${(err as Error).message}`);
               }
             }
           }
@@ -221,7 +221,7 @@ export class ALStructureCreator implements IDisposable {
       if (err instanceof ALFolderExistsError) {
         this.window.showErrorMessage(`ALStructureCreator Error: '${err.message}'.`);
       } else {
-        this.window.showErrorMessage(`Error: ${err.message}`);
+        this.window.showErrorMessage(`Error: ${(err as Error).message}`);
       }
     }
   }
@@ -492,7 +492,7 @@ export class ALStructureCreator implements IDisposable {
       if (err instanceof ALFolderExistsError) {
         this.window.showErrorMessage(`ALStructureCreator Error: '${err.message}'.`);
       } else {
-        this.window.showErrorMessage(`Error: ${err.message}`);
+        this.window.showErrorMessage(`Error: ${(err as Error).message}`);
       }
     }
 
@@ -599,7 +599,7 @@ export class ALStructureCreator implements IDisposable {
       if (err instanceof ALFolderExistsError) {
         this.window.showErrorMessage(`ALStructureCreator Error: '${err.message}'.`);
       } else {
-        this.window.showErrorMessage(`Error: ${err.message}`);
+        this.window.showErrorMessage(`Error: ${(err as Error).message}`);
       }
     }
   }
