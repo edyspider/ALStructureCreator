@@ -227,6 +227,7 @@ Updated release **0.3.0**.
 - New configuration in json format that allows to customize the default al folder structure.
 - New general action to create specific folder.
 - New configurations to identify type of object/files.
+
 #### View [Change Log](https://github.com/edyspider/ALStructureCreator/blob/master/CHANGELOG.md)
 
 -----------------------------------------------------------------------------------------------------------

@@ -3,6 +3,11 @@
 All notable changes to the **AL Structure Creator** extension will be documented in this file.
 
 ----
+### 0.3.3
+#### Added
+- Minor fixes.
+
+----
 ### 0.3.0
 #### Added
 - New configuration in json format that allows to customize the default al folder structure.
