@@ -40,7 +40,6 @@ interface ASCObjectFolders {
     query: string;
     report: string;
     layout: string;
-    requestpage: string;
     table: string;
     xmlport: string;
 }
@@ -57,7 +56,6 @@ interface ASCObjectIdent {
     profile: string;
     query: string;
     report: string;
-    requestpage: string;
     table: string;
     xmlport: string;
 }

@@ -9,7 +9,7 @@
 		"url": "https://github.com/edyspider",
 		"email": "dev@edyspider.com"
 	},
-	"version": "0.3.3",
+	"version": "0.3.4",
 	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/edyspider/ALStructureCreator/issues"
@@ -130,10 +130,6 @@
 												}
 											}
 										},
-										"requestpage": {
-											"name": "requestpage",
-											"autocreate": false
-										},
 										"table": {
 											"name": "table",
 											"autocreate": true,
@@ -226,10 +222,6 @@
 													"autocreate": true
 												}
 											}
-										},
-										"requestpage": {
-											"name": "requestpage",
-											"autocreate": false
 										},
 										"table": {
 											"name": "table",
@@ -328,11 +320,6 @@
 						"type": "string",
 						"default": "Rep",
 						"description": "This configuration defines how to identify report file name."
-					},
-					"ALStructureCreator.ObjectIdent.RequestPage": {
-						"type": "string",
-						"default": "Req",
-						"description": "This configuration defines how to identify requestpage file name."
 					},
 					"ALStructureCreator.ObjectIdent.Table": {
 						"type": "string",

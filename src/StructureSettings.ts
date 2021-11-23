@@ -26,7 +26,6 @@ export class StructureSettings {
     private static objEnumProfile = "profile";
     private static objEnumQuery = "query";
     private static objEnumReport = "report";
-    private static objEnumRequestpage = "requestpage";
     private static objEnumTable = "table";
     private static objEnumXmlport = "xmlport";
 
@@ -61,7 +60,6 @@ export class StructureSettings {
     private static objIdentProfile = vscode.workspace.getConfiguration().get('ALStructureCreator.ObjectIdent.Profile');
     private static objIdentQuery = vscode.workspace.getConfiguration().get('ALStructureCreator.ObjectIdent.Query');
     private static objIdentReport = vscode.workspace.getConfiguration().get('ALStructureCreator.ObjectIdent.Report');
-    private static objIdentRequestPage = vscode.workspace.getConfiguration().get('ALStructureCreator.ObjectIdent.RequestPage');
     private static objIdentTable = vscode.workspace.getConfiguration().get('ALStructureCreator.ObjectIdent.Table');
     private static objIdentXmlPort = vscode.workspace.getConfiguration().get('ALStructureCreator.ObjectIdent.XmlPort');
 
@@ -140,7 +138,6 @@ export class StructureSettings {
             profile: <string>this.objIdentProfile,
             query: <string>this.objIdentQuery,
             report: <string>this.objIdentReport,
-            requestpage: <string>this.objIdentRequestPage,
             table: <string>this.objIdentTable,
             xmlport: <string>this.objIdentXmlPort
         };
@@ -177,7 +174,6 @@ export class StructureSettings {
             profile: this.objEnumProfile,
             query: this.objEnumQuery,
             report: this.objEnumReport,
-            requestpage: this.objEnumRequestpage,
             table: this.objEnumTable,
             xmlport: this.objEnumXmlport
         };
