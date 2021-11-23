@@ -148,7 +148,7 @@ This extension contributes the following commands:
     <td>pag/page</td>
   </tr>
   <tr>
-    <td>--permissionset</td>
+  <td>--permissionset</td>
     <td>permissionset</td>
     <td>pers/permissionset</td>
   </tr>
@@ -171,11 +171,6 @@ This extension contributes the following commands:
     <td>----layout</td>
     <td>layout</td>
     <td>lay/layout</td>
-  </tr>
-  <tr>
-    <td>--requestpage</td>
-    <td>requestpage</td>
-    <td>req/requestpage</td>
   </tr>
   <tr>
     <td>--table</td>

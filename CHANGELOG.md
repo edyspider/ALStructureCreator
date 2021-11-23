@@ -3,6 +3,11 @@
 All notable changes to the **AL Structure Creator** extension will be documented in this file.
 
 ----
+### 0.3.4
+#### Removed
+- Remove RequestPage folder from the settings structure.
+
+----
 ### 0.3.3
 #### Added
 - Minor fixes.

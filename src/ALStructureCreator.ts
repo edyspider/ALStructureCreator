@@ -170,10 +170,6 @@ export class ALStructureCreator implements IDisposable {
       case "report":
         newFolderDir = this.getFolderTypePath(objEnum.report);
         break;
-      case "req":
-      case "requestpage":
-        newFolderDir = this.getFolderTypePath(objEnum.requestpage);
-        break;
       case "tab":
       case "table":
         newFolderDir = this.getFolderTypePath(objEnum.table);
@@ -190,10 +186,10 @@ export class ALStructureCreator implements IDisposable {
       case rootEnum.object:
         newFolderDir = this.getFolderTypePath(rootEnum.object);
         break;
-      case "perm":
-      case rootEnum.permission:
-        newFolderDir = this.getFolderTypePath(rootEnum.permission);
-        break;
+        case "perm":
+        case rootEnum.permission:
+          newFolderDir = this.getFolderTypePath(rootEnum.permission);
+          break;
       case "tst":
       case rootEnum.test:
         newFolderDir = this.getFolderTypePath(rootEnum.test);
@@ -240,7 +236,6 @@ export class ALStructureCreator implements IDisposable {
     var folderQuery = this.getFolderTypePath('query');
     var folderReport = this.getFolderTypePath('report');
     var folderLayout = this.getFolderTypePath('layout');
-    var folderRequestPage = this.getFolderTypePath('requestpage');
     var folderTable = this.getFolderTypePath('table');
     var folderXmlport = this.getFolderTypePath('xmlport');
     //var folderPermission = this.getFolderTypePath('permission');
@@ -262,7 +257,6 @@ export class ALStructureCreator implements IDisposable {
     const objIdentProfile = objTypeName.profile;
     const objIdentQuery = objTypeName.query;
     const objIdentReport = objTypeName.report;
-    const objIdentRequestPage = objTypeName.requestpage;
     const objIdentTable = objTypeName.table;
     const objIdentXmlport = objTypeName.xmlport;
 
@@ -343,12 +337,6 @@ export class ALStructureCreator implements IDisposable {
               if(file.startsWith(objIdentReport)) {
                 this.syncFolderPath(folderReport);
                 fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderReport, path.basename(file)));
-              }
-
-              // --> RequestPage
-              if(file.startsWith(objIdentRequestPage)) {
-                this.syncFolderPath(folderRequestPage);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderRequestPage, path.basename(file)));
               }
 
               // --> Table
@@ -433,12 +421,6 @@ export class ALStructureCreator implements IDisposable {
               if(file.endsWith(objIdentReport,(fileNameLength-3))) {
                 this.syncFolderPath(folderReport);
                 fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderReport, path.basename(file)));
-              }
-
-              // --> RequestPage
-              if(file.endsWith(objIdentRequestPage,(fileNameLength-3))) {
-                this.syncFolderPath(folderRequestPage);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderRequestPage, path.basename(file)));
               }
 
               // --> Table
