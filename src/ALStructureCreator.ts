@@ -22,7 +22,7 @@ export class ALStructureCreator implements IDisposable {
   }
 
   async addNewFolder(): Promise<void> {
-    let forldersName: string[] = ["tab, table", "pag, page", "cod, codeunit", "rep, report", "xml, xmlport", "int, interface", "enu, enum", "ent, entitlement", "dnet, dotnet", "perm, permission", "pers, permissionset", "tran, translations"];
+    let forldersName: string[] = ["tab, table", "pag, page", "cod, codeunit", "rep, report", "xml, xmlport", "int, interface", "enu, enum", "ent, entitlement", "dnet, dotnet", "pers, permissionset", "tran, translations"];
     const rndInt = Math.floor(Math.random() * 11) + 1;
 
     const options: InputBoxOptions = {
@@ -186,10 +186,6 @@ export class ALStructureCreator implements IDisposable {
       case rootEnum.object:
         newFolderDir = this.getFolderTypePath(rootEnum.object);
         break;
-        case "perm":
-        case rootEnum.permission:
-          newFolderDir = this.getFolderTypePath(rootEnum.permission);
-          break;
       case "tst":
       case rootEnum.test:
         newFolderDir = this.getFolderTypePath(rootEnum.test);
@@ -238,7 +234,6 @@ export class ALStructureCreator implements IDisposable {
     var folderLayout = this.getFolderTypePath('layout');
     var folderTable = this.getFolderTypePath('table');
     var folderXmlport = this.getFolderTypePath('xmlport');
-    //var folderPermission = this.getFolderTypePath('permission');
     var folderTranslation = this.getFolderTypePath('translation');
     //var folderWebService = this.getFolderTypePath('webservice');
 

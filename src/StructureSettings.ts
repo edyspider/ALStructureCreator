@@ -10,7 +10,6 @@ export class StructureSettings {
     private static folderPropSubFolder = 'subfolder';
     private static rootEnumLogo = "logo";
     private static rootEnumObject = "object";
-    private static rootEnumPermission = "permission";
     private static rootEnumTest = "test";
     private static rootEnumTranslation = "translation";
     private static rootEnumWebservice = "webservice";
@@ -156,7 +155,6 @@ export class StructureSettings {
         let roots = {
             logo: this.rootEnumLogo,
             object: this.rootEnumObject,
-            permission: this.rootEnumPermission,
             test: this.rootEnumTest,
             translation: this.rootEnumTranslation,
             webservice: this.rootEnumWebservice

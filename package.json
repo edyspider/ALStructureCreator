@@ -141,10 +141,6 @@
 										}
 									}
 								},
-								"permission": {
-									"name": "permissions",
-									"autocreate": true
-								},
 								"test": {
 									"name": "tests",
 									"autocreate": false
@@ -233,10 +229,6 @@
 											"autocreate": true
 										}
 									}
-								},
-								"permission": {
-									"name": "permissions",
-									"autocreate": true
 								},
 								"test": {
 									"name": "tests",
