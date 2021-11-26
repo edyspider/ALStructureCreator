@@ -183,11 +183,6 @@ This extension contributes the following commands:
     <td>xml/xmlport</td>
   </tr>
   <tr>
-    <td>permission</td>
-    <td>permissions</td>
-    <td>perm/permission</td>
-  </tr>
-  <tr>
     <td>test</td>
     <td>tests</td>
     <td>tst/test</td>
