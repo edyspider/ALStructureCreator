@@ -21,7 +21,6 @@
   </a>
 </p>
 
-
 ## Features
 
 This extension allows you to create the folder structure for AL projects and help you organize the application files.
@@ -211,14 +210,15 @@ There are no reported issues.
 
 ## Release Notes
 
-Updated release **0.3.0**.
+Updated release **0.3.x**.
 
-#### Added Features
-- New configuration in json format that allows to customize the default al folder structure.
-- New general action to create specific folder.
-- New configurations to identify type of object/files.
+### Added Features
 
-#### View [Change Log](https://github.com/edyspider/ALStructureCreator/blob/master/CHANGELOG.md)
+* New configuration in json format that allows to customize the default al folder structure.
+* New general action to create specific folder.
+* New configurations to identify type of object/files.
+
+### View [Change Log](https://github.com/edyspider/ALStructureCreator/blob/master/CHANGELOG.md)
 
 -----------------------------------------------------------------------------------------------------------
 
@@ -231,5 +231,5 @@ Updated release **0.3.0**.
 
 ## License
 
-- **[MIT license](https://github.com/edyspider/ALStructureCreator/blob/master/LICENSE)**
-- Copyright 2020 &copy; <a href="https://github.com/edyspider" target="_blank">EdySpider</a>.
+* **[MIT license](https://github.com/edyspider/ALStructureCreator/blob/master/LICENSE)**
+* Copyright 2020 &copy; <a href="https://github.com/edyspider" target="_blank">EdySpider</a>.
