@@ -64,6 +64,8 @@ export class ALStructureCreator implements IDisposable {
           var root = JSON.parse(JSON.stringify(index));
           let folderName: string = "";
           let autoCreate: boolean = false;
+          let createCust: boolean = false;
+          let createExt: boolean = false;
           var folderDir;
 
           // check root folders properties
@@ -86,19 +88,37 @@ export class ALStructureCreator implements IDisposable {
             const folderPath = this.appendProp(rootPath,folderProp.name);
             if (vscode.workspace.getConfiguration().has(folderPath)) {
               folderName = `${vscode.workspace.getConfiguration().get(folderPath)}`;
-              
-              try {
-                let absolutePath = this.toAbsolutePath(subdir);
-                folderDir = path.join(absolutePath, folderName);
+              this.createFolder(folderName,subdir);
+            }
+          }
 
-                if(!fs.existsSync(folderDir)) {
-                  fs.mkdirSync(`${folderDir}`);
-                } else {
-                  throw new ALFolderExistsError(`Folder '${folderName}' already exists.`);
-                }
-              } catch (err) {
-                console.log(`Error: ${(err as Error).message}`);
-              }
+          // check create-cust
+          const createCustPath = this.appendProp(rootPath,folderProp.cust);
+          if (vscode.workspace.getConfiguration().has(createCustPath)) {
+            createCust = (<boolean>vscode.workspace.getConfiguration().get(createCustPath));
+          }
+
+          if(createCust) {
+            // check name
+            const folderPath = this.appendProp(rootPath,folderProp.name);
+            if (vscode.workspace.getConfiguration().has(folderPath)) {
+              folderName = `${vscode.workspace.getConfiguration().get(folderPath)}` + 'cust';
+              this.createFolder(folderName,subdir);
+            }
+          }
+
+          // check create-ext
+          const createExtPath = this.appendProp(rootPath,folderProp.ext);
+          if (vscode.workspace.getConfiguration().has(createExtPath)) {
+            createExt = (<boolean>vscode.workspace.getConfiguration().get(createExtPath));
+          }
+
+          if(createExt) {
+            // check name
+            const folderPath = this.appendProp(rootPath,folderProp.name);
+            if (vscode.workspace.getConfiguration().has(folderPath)) {
+              folderName = `${vscode.workspace.getConfiguration().get(folderPath)}` + 'ext';
+              this.createFolder(folderName,subdir);
             }
           }
 
@@ -216,6 +236,27 @@ export class ALStructureCreator implements IDisposable {
         this.window.showErrorMessage(`Error: ${(err as Error).message}`);
       }
     }
+  }
+
+  createFolder(folderName: string, subdir: string): boolean {
+    var folderDir;
+
+    try {
+      let absolutePath = this.toAbsolutePath(subdir);
+      folderDir = path.join(absolutePath, folderName);
+
+      if(!fs.existsSync(folderDir)) {
+        fs.mkdirSync(`${folderDir}`);
+        
+        return true;
+      } else {
+        throw new ALFolderExistsError(`Folder '${folderName}' already exists.`);
+      }
+    } catch (err) {
+      console.log(`Error: ${(err as Error).message}`);
+    }
+
+    return false;
   }
 
   reorganizeAppFiles() {

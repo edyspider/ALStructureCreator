@@ -14,6 +14,8 @@ type ASCFileExtensions = {
 
 type ASCFolderProperties = {
     create: string;
+    cust: string;
+    ext: string;
     name: string;
     subfolder: string;
 };

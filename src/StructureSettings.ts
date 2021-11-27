@@ -6,6 +6,8 @@ import { ObjectIdent } from './structure.interface';
 
 export class StructureSettings {
     private static folderPropCreate = 'autocreate';
+    private static folderPropCust = 'createcust';
+    private static folderPropExt = 'createext';
     private static folderPropName = 'name';
     private static folderPropSubFolder = 'subfolder';
     private static rootEnumLogo = "logo";
@@ -115,6 +117,8 @@ export class StructureSettings {
     public static GetFolderProperties() : FolderProperties {
         let attr = {
             create: this.folderPropCreate,
+            cust: this.folderPropCust,
+            ext: this.folderPropExt,
             name: this.folderPropName,
             subfolder: this.folderPropSubFolder
         };
@@ -149,6 +153,8 @@ export class StructureSettings {
     public static GetStructureProperties() : StructureProperties {
         let folder = {
             create: this.folderPropCreate,
+            cust: this.folderPropCust,
+            ext: this.folderPropExt,
             name: this.folderPropName,
             subfolder: this.folderPropSubFolder
         };
