@@ -9,7 +9,7 @@
 		"url": "https://github.com/edyspider",
 		"email": "dev@edyspider.com"
 	},
-	"version": "0.3.8",
+	"version": "0.3.9",
 	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/edyspider/ALStructureCreator/issues"
@@ -141,10 +141,6 @@
 										}
 									}
 								},
-								"test": {
-									"name": "tests",
-									"autocreate": false
-								},
 								"translation": {
 									"name": "translations",
 									"autocreate": true
@@ -230,10 +226,6 @@
 										}
 									}
 								},
-								"test": {
-									"name": "tests",
-									"autocreate": false
-								},
 								"translation": {
 									"name": "translations",
 									"autocreate": true
@@ -247,7 +239,7 @@
 					},
 					"ALStructureCreator.ObjectIdentification": {
 						"type": "string",
-						"default": "Prefix",
+						"default": "Suffix",
 						"enum": [
 							"Prefix",
 							"Suffix"

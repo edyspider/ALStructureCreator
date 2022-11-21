@@ -23,7 +23,6 @@ type ASCFolderProperties = {
 interface ASCRootFolders {
     logo: string;
     object: string;
-    test: string;
     translation: string;
     webservice: string;
 }
