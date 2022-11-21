@@ -206,10 +206,6 @@ export class ALStructureCreator implements IDisposable {
       case rootEnum.object:
         newFolderDir = this.getFolderTypePath(rootEnum.object);
         break;
-      case "tst":
-      case rootEnum.test:
-        newFolderDir = this.getFolderTypePath(rootEnum.test);
-        break;
       case "tran":
       case rootEnum.translation:
         newFolderDir = this.getFolderTypePath(rootEnum.translation);
