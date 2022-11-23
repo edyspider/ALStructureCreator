@@ -9,7 +9,7 @@
 		"url": "https://github.com/edyspider",
 		"email": "dev@edyspider.com"
 	},
-	"version": "0.3.9",
+	"version": "0.4.0",
 	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/edyspider/ALStructureCreator/issues"
@@ -109,7 +109,7 @@
 										},
 										"permissionset": {
 											"name": "permissionset",
-											"autocreate": false,
+											"autocreate": true,
 											"createext": false
 										},
 										"profile": {
@@ -147,7 +147,7 @@
 								},
 								"webservice": {
 									"name": "webservice",
-									"autocreate": true
+									"autocreate": false
 								}
 							}
 						},
@@ -194,7 +194,7 @@
 										},
 										"permissionset": {
 											"name": "permissionset",
-											"autocreate": false,
+											"autocreate": true,
 											"createext": false
 										},
 										"profile": {
@@ -232,7 +232,7 @@
 								},
 								"webservice": {
 									"name": "webservice",
-									"autocreate": true
+									"autocreate": false
 								}
 							}
 						}
@@ -242,17 +242,24 @@
 						"default": "Suffix",
 						"enum": [
 							"Prefix",
-							"Suffix"
+							"Suffix",
+							"Object"
 						],
 						"enumDescriptions": [
 							"e.g.: TabEmployeMgt.al",
-							"e.g.: EmployeeMgtTab.al"
+							"e.g.: EmployeeMgtTab.al",
+							"e.g.: table 50100 CustTable { }"
 						],
 						"description": "This configuration defines how to identify the objects files, by the object filename prefix or suffix."
 					},
+					"ALStructureCreator.ObjectIdent.MaxReadLine": {
+						"type":"integer",
+						"default": 15,
+						"description": "Maximun read line to identify a type of object."
+					}, 
 					"ALStructureCreator.ObjectIdent.Codeunit": {
 						"type": "string",
-						"default": "Cod",
+						"default": "Codeunit",
 						"description": "This configuration defines how to identify codeunit file name."
 					},
 					"ALStructureCreator.ObjectIdent.ControlAddin": {
@@ -267,7 +274,7 @@
 					},
 					"ALStructureCreator.ObjectIdent.Entitlement": {
 						"type": "string",
-						"default": "Ent",
+						"default": "Entitlement",
 						"description": "This configuration defines how to identify entitlement file name."
 					},
 					"ALStructureCreator.ObjectIdent.Enum": {
@@ -277,12 +284,12 @@
 					},
 					"ALStructureCreator.ObjectIdent.Interface": {
 						"type": "string",
-						"default": "Int",
+						"default": "Interface",
 						"description": "This configuration defines how to identify interface file name."
 					},
 					"ALStructureCreator.ObjectIdent.Page": {
 						"type": "string",
-						"default": "Pag",
+						"default": "Page",
 						"description": "This configuration defines how to identify page file name."
 					},
 					"ALStructureCreator.ObjectIdent.PermissionSet": {
@@ -297,17 +304,22 @@
 					},
 					"ALStructureCreator.ObjectIdent.Query": {
 						"type": "string",
-						"default": "Que",
+						"default": "Query",
 						"description": "This configuration defines how to identify query file name."
 					},
 					"ALStructureCreator.ObjectIdent.Report": {
 						"type": "string",
-						"default": "Rep",
+						"default": "Report",
 						"description": "This configuration defines how to identify report file name."
 					},
 					"ALStructureCreator.ObjectIdent.Table": {
 						"type": "string",
-						"default": "Tab",
+						"default": "Table",
+						"description": "This configuration defines how to identify table file name."
+					},
+					"ALStructureCreator.ObjectIdent.XmlPort": {
+						"type": "string",
+						"default": "XmlPort",
 						"description": "This configuration defines how to identify table file name."
 					}
 				}
