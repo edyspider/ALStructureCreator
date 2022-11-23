@@ -49,6 +49,7 @@ export class StructureSettings {
     private static extPermissionName = 'extensionsPermissionSet';
 
     private static objIdentification = vscode.workspace.getConfiguration().get('ALStructureCreator.ObjectIdentification');
+    private static objIdentMaxReadLine = vscode.workspace.getConfiguration().get('ALStructureCreator.ObjectIdent.MaxReadLine');
     private static objIdentCodeunit = vscode.workspace.getConfiguration().get('ALStructureCreator.ObjectIdent.Codeunit');
     private static objIdentControlAddin = vscode.workspace.getConfiguration().get('ALStructureCreator.ObjectIdent.ControlAddin');
     private static objIdentDotNet = vscode.workspace.getConfiguration().get('ALStructureCreator.ObjectIdent.DotNet');
@@ -91,6 +92,10 @@ export class StructureSettings {
 
     public static GetobjIdentification(): string {
         return String(this.objIdentification);
+    }
+
+    public static GetObjectMaxReadLine(): number {
+        return Number(this.objIdentMaxReadLine);
     }
 
     public static GetFileExtensions() : FileExtentions {

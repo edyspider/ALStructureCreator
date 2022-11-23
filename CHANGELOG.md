@@ -4,6 +4,26 @@ All notable changes to the **AL Structure Creator** extension will be documented
 
 ----
 
+## 0.4.0
+
+### Added
+
+- Allow file reorganization by reading the object type inside al files.
+
+----
+
+## 0.3.9
+
+### Added
+
+- Minor fixes
+
+### Removed
+
+- Remove test folder from the structure
+
+----
+
 ## 0.3.8
 
 ### Added

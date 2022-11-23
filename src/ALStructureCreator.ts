@@ -2,11 +2,15 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as vscode from 'vscode';
 
+import { readFileSync, promises as fsPromises } from 'fs';
+import { join } from 'path';
+
 import { InputBoxOptions } from "vscode";
 import { IDisposable } from './disposable.interface';
 import { VSCodeWindow } from './vscode.interfaces';
 import { ALFolderExistsError } from './errors/al-folder-exists.error';
 import { StructureSettings } from './StructureSettings';
+import { exit } from 'process';
 
 export class ALStructureCreator implements IDisposable {
   constructor(
@@ -253,7 +257,7 @@ export class ALStructureCreator implements IDisposable {
     }
 
     return false;
-  }
+  }  
 
   reorganizeAppFiles() {
     var folderLogo = this.getFolderTypePath('logo');
@@ -262,14 +266,17 @@ export class ALStructureCreator implements IDisposable {
     var folderDotNet = this.getFolderTypePath('dotnet');
     var folderEntitlement = this.getFolderTypePath('entitlement');
     var folderEnum = this.getFolderTypePath('enum');
+    var folderEnumExt = this.getFolderTypePath('enum') + 'ext';
     var folderInterface = this.getFolderTypePath('interface');
     var folderPage = this.getFolderTypePath('page');
+    var folderPageExt = this.getFolderTypePath('page') + 'ext';
     var folderPermissionSet = this.getFolderTypePath('permissionset');
     var folderProfile = this.getFolderTypePath('profile');
     var folderQuery = this.getFolderTypePath('query');
     var folderReport = this.getFolderTypePath('report');
     var folderLayout = this.getFolderTypePath('layout');
     var folderTable = this.getFolderTypePath('table');
+    var folderTableExt = this.getFolderTypePath('table') + 'ext';
     var folderXmlport = this.getFolderTypePath('xmlport');
     var folderTranslation = this.getFolderTypePath('translation');
     //var folderWebService = this.getFolderTypePath('webservice');
@@ -469,18 +476,70 @@ export class ALStructureCreator implements IDisposable {
             }
             break;
           case "Object":
-            //const readLine = fs.readFileSync(file,'UTF-8');
-            fs.readFile(file, function(err, data) {
-              if(err) {throw err;}
+            // AL files
+            if(file.split('.').pop() === fileExt.al) {
+              let filepath = path.join(rootFolder, path.basename(file));
+              let objType = this.getAlObjectType(filepath);
 
-              const arr = data.toString().replace(/\r\n/g,'\n').split('\n');
-
-              for(let i of arr) {
-                console.log(i);
+              switch(objType) {
+                case "codeunit":
+                  this.syncFolderPath(folderCodeunit);
+                  fs.renameSync(filepath,path.join(folderCodeunit, path.basename(file)));
+                  break;
+                case "entitlement":
+                    this.syncFolderPath(folderEntitlement);
+                    fs.renameSync(filepath,path.join(folderEntitlement, path.basename(file)));
+                    break;
+                case "enum":
+                  this.syncFolderPath(folderEnum);
+                  fs.renameSync(filepath,path.join(folderEnum, path.basename(file)));
+                  break;
+                case "enumextension":
+                  this.syncFolderPath(folderEnumExt);
+                  fs.renameSync(filepath,path.join(folderEnumExt, path.basename(file)));
+                  break;
+                case "page":
+                  this.syncFolderPath(folderPage);
+                  fs.renameSync(filepath,path.join(folderPage, path.basename(file)));
+                  break;
+                case "pageextension":
+                  this.syncFolderPath(folderPageExt);
+                  fs.renameSync(filepath,path.join(folderPageExt, path.basename(file)));
+                  break;
+                case "permissionset":
+                  this.syncFolderPath(folderPermissionSet);
+                  fs.renameSync(filepath,path.join(folderPermissionSet, path.basename(file)));
+                  break;
+                case "profile":
+                  this.syncFolderPath(folderProfile);
+                  fs.renameSync(filepath,path.join(folderProfile, path.basename(file)));
+                  break;
+                case "query":
+                  this.syncFolderPath(folderQuery);
+                  fs.renameSync(filepath,path.join(folderQuery, path.basename(file)));
+                  break;
+                case "report":
+                  this.syncFolderPath(folderReport);
+                  fs.renameSync(filepath,path.join(folderReport, path.basename(file)));
+                  break;
+                case "table":
+                  this.syncFolderPath(folderTable);
+                  fs.renameSync(filepath,path.join(folderTable, path.basename(file)));
+                  break;
+                case "tableextension":
+                  this.syncFolderPath(folderTableExt);
+                  fs.renameSync(filepath,path.join(folderTableExt, path.basename(file)));
+                  break;
+                case "xmlport":
+                  this.syncFolderPath(folderXmlport);
+                  fs.renameSync(filepath,path.join(folderXmlport, path.basename(file)));
+                  break;
+                default:
+                  console.log("no identified al object for the file " + file.toString());
+                  break;
               }
-            });
-            //const searchTerm = 'Object';
-            //const indexOfFirst = paragraph.indexOf(searchTerm);
+            }
+
             break;
         }
         
@@ -511,6 +570,76 @@ export class ALStructureCreator implements IDisposable {
     }
 
     this.window.showInformationMessage(`ALStructureCreator: Reorganize App Files Executed`);
+  }
+
+  getAlObjectType(filename: string): string {
+    const result = readFileSync(filename, 'utf-8');
+    const maxReadLine = StructureSettings.GetObjectMaxReadLine();
+
+    let textLine = "";
+    let objFound = "";
+    let i = 0;
+    let foundObj = false;
+
+    while ((i<maxReadLine) && (foundObj === false)) {
+      textLine = result.split("\n")[i];
+
+      if (textLine.startsWith("codeunit ")) {
+        objFound = "codeunit";
+        foundObj = true;
+      }
+      if (textLine.startsWith("entitlement ")) {
+        objFound = "entitlement";
+        foundObj = true;
+      }
+      if (textLine.startsWith("enum ")) {
+        objFound = "enum";
+        foundObj = true;
+      }
+      if (textLine.startsWith("enumextension ")) {
+        objFound = "enumextension";
+        foundObj = true;
+      }
+      if (textLine.startsWith("page ")) {
+        objFound = "page";
+        foundObj = true;
+      }
+      if (textLine.startsWith("pageextension ")) {
+        objFound = "pageextension";
+        foundObj = true;
+      }
+      if (textLine.startsWith("permissionset ")) {
+        objFound = "permissionset";
+        foundObj = true;
+      }
+      if (textLine.startsWith("profile ")) {
+        objFound = "profile";
+        foundObj = true;
+      }
+      if (textLine.startsWith("query ")) {
+        objFound = "query";
+        foundObj = true;
+      }
+      if (textLine.startsWith("report ")) {
+        objFound = "report";
+        foundObj = true;
+      }
+      if (textLine.startsWith("table ")) {
+        objFound = "table";
+        foundObj = true;
+      }
+      if (textLine.startsWith("tableextension ")) {
+        objFound = "tableextension";
+        foundObj = true;
+      }
+      if (textLine.startsWith("xmlport ")) {
+        objFound = "xmlport";
+        foundObj = true;
+      }
+      i++;
+    }
+
+    return objFound;
   }
 
   getFolderTypePath(folderType: string): string {

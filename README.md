@@ -38,6 +38,7 @@ You can also customize the standard structure or use other names to create a fol
 
 * `Dynamics 365 Business Central`.
 * `Visual Studio Code`.
+* `AL Language Extension for VSCode`.
 
 ---
 
@@ -48,6 +49,7 @@ This extension contributes the following settings:
 * `ALStructureCreator.FolderStructure`: This configuration allows you to define the folder structure for AL projects that best suits you.
 * `ALStructureCreator.ObjectIdentification`: This configuration defines how to identify the objects files, by the object prefix/suffix filename or reading the file. **Prefix**,**Suffix** or **Object** (e.g: `TabEmployeMgt.al`,`EmployeeMgtTab.al`, `..OBJECT Table 50010`).
 * `ALStructureCreator.ObjectIdent.<ObjectType>`: This configuration defines how to identify a specific object file by its prefix/suffix name.
+* `ALStructureCreator.ObjectIdent.MaxReadLine`: Set this configuration to limit the amount of lines to read when identifying the objet type for the **ReorganizeFiles** action.
 
 The **ObjectIdent**/**ObjectIdentification.** settings are used for the action to reorganize the project files inside a specific folder.
 
@@ -182,11 +184,6 @@ This extension contributes the following commands:
     <td>xml/xmlport</td>
   </tr>
   <tr>
-    <td>test</td>
-    <td>tests</td>
-    <td>tst/test</td>
-  </tr>
-  <tr>
     <td>translation</td>
     <td>translations</td>
     <td>tran/translations</td>
@@ -210,13 +207,12 @@ There are no reported issues.
 
 ## Release Notes
 
-Updated release **0.3.x**.
+Updated release **0.4.x**.
 
 ### Added Features
 
 * New configuration in json format that allows to customize the default al folder structure.
-* New general action to create specific folder.
-* New configurations to identify type of object/files.
+* Reading al files to reorganize the objects in a specific folder.
 
 ### View [Change Log](https://github.com/edyspider/ALStructureCreator/blob/master/CHANGELOG.md)
 
