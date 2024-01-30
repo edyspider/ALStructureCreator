@@ -84,14 +84,14 @@ export class StructureProperties {
     }
 }
 
-export class FileExtentions {
+export class FileExtensions {
     private fileExt: ASCFileExtensions;
 
     constructor(extFile: ASCFileExtensions) {
         this.fileExt = extFile;
     }
 
-    public getFileExtensons() {
+    public getFileExtensions() {
         return this.fileExt;
     }
 }

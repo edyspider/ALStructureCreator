@@ -9,7 +9,7 @@
 		"url": "https://github.com/edyspider",
 		"email": "dev@edyspider.com"
 	},
-	"version": "0.4.0",
+	"version": "0.5.0",
 	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/edyspider/ALStructureCreator/issues"
@@ -81,7 +81,7 @@
 											"autocreate": true
 										},
 										"controladdin": {
-											"name": "controladdins",
+											"name": "controladdin",
 											"autocreate": false
 										},
 										"dotnet": {
@@ -98,7 +98,7 @@
 											"createext": false
 										},
 										"interface": {
-											"name": "interfaces",
+											"name": "interface",
 											"autocreate": false
 										},
 										"page": {
@@ -113,7 +113,7 @@
 											"createext": false
 										},
 										"profile": {
-											"name": "profiles",
+											"name": "profile",
 											"autocreate": false
 										},
 										"query": {
@@ -136,7 +136,7 @@
 											"createext": false
 										},
 										"xmlport": {
-											"name": "codeunit",
+											"name": "xmlport",
 											"autocreate": true
 										}
 									}
@@ -166,7 +166,7 @@
 											"autocreate": true
 										},
 										"controladdin": {
-											"name": "controladdins",
+											"name": "controladdin",
 											"autocreate": false
 										},
 										"dotnet": {
@@ -183,7 +183,7 @@
 											"createext": false
 										},
 										"interface": {
-											"name": "interfaces",
+											"name": "interface",
 											"autocreate": false
 										},
 										"page": {
@@ -198,7 +198,7 @@
 											"createext": false
 										},
 										"profile": {
-											"name": "profiles",
+											"name": "profile",
 											"autocreate": false
 										},
 										"query": {
@@ -221,7 +221,7 @@
 											"createext": false
 										},
 										"xmlport": {
-											"name": "codeunit",
+											"name": "xmlport",
 											"autocreate": true
 										}
 									}
@@ -246,17 +246,17 @@
 							"Object"
 						],
 						"enumDescriptions": [
-							"e.g.: TabEmployeMgt.al",
+							"e.g.: TabEmployeeMgt.al",
 							"e.g.: EmployeeMgtTab.al",
 							"e.g.: table 50100 CustTable { }"
 						],
 						"description": "This configuration defines how to identify the objects files, by the object filename prefix or suffix."
 					},
 					"ALStructureCreator.ObjectIdent.MaxReadLine": {
-						"type":"integer",
+						"type": "integer",
 						"default": 15,
-						"description": "Maximun read line to identify a type of object."
-					}, 
+						"description": "Maximum read line to identify a type of object."
+					},
 					"ALStructureCreator.ObjectIdent.Codeunit": {
 						"type": "string",
 						"default": "Codeunit",
@@ -265,7 +265,7 @@
 					"ALStructureCreator.ObjectIdent.ControlAddin": {
 						"type": "string",
 						"default": "ControlAddin",
-						"description": "This configuration defines how to identify control addin file name."
+						"description": "This configuration defines how to identify control add-in file name."
 					},
 					"ALStructureCreator.ObjectIdent.DotNet": {
 						"type": "string",
@@ -336,7 +336,7 @@
 	"devDependencies": {
 		"@types/glob": "^7.1.1",
 		"@types/mocha": "^5.2.7",
-		"@types/node": "^12.20.16",
+		"@types/node": "^12.20.55",
 		"@types/vscode": "^1.41.0",
 		"ansi-regex": ">=5.0.1",
 		"glob": "^7.1.5",

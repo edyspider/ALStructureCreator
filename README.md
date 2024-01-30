@@ -97,6 +97,7 @@ This extension contributes the following commands:
 
 * `ES: Create All Folder Structure`: This command create all application folder structure for AL projects.
 * `ES: Create Folder Structure`: This command create a defined application folder for AL projects. Follow the allowed application folders/subfolders and shortcut name.
+
 <table>
   <tr>
     <th>Folder Code/Structure</th>
@@ -207,16 +208,14 @@ There are no reported issues.
 
 ## Release Notes
 
-Updated release **0.4.x**.
+Updated release **0.5.x**.
 
 ### Added Features
 
 * New configuration in json format that allows to customize the default al folder structure.
 * Reading al files to reorganize the objects in a specific folder.
 
-### View [Change Log](https://github.com/edyspider/ALStructureCreator/blob/master/CHANGELOG.md)
-
------------------------------------------------------------------------------------------------------------
+---
 
 ## Authors
 

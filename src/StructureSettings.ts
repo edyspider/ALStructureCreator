@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { StructureProperties } from './structure.interface';
-import { FileExtentions } from './structure.interface';
+import { FileExtensions } from './structure.interface';
 import { FolderProperties } from './structure.interface';
 import { ObjectIdent } from './structure.interface';
 
@@ -90,7 +90,7 @@ export class StructureSettings {
         return this.structureRootPath;
     }
 
-    public static GetobjIdentification(): string {
+    public static GetObjIdentification(): string {
         return String(this.objIdentification);
     }
 
@@ -98,7 +98,7 @@ export class StructureSettings {
         return Number(this.objIdentMaxReadLine);
     }
 
-    public static GetFileExtensions() : FileExtentions {
+    public static GetFileExtensions() : FileExtensions {
         let fileExt = {
             al: this.fileExtAl,
             docx: this.fileExtDocx,
@@ -113,7 +113,7 @@ export class StructureSettings {
             xml: this.fileExtXml
         };
 
-        let extensions: FileExtentions = new FileExtentions(fileExt);
+        let extensions: FileExtensions = new FileExtensions(fileExt);
 
         return extensions;
     }

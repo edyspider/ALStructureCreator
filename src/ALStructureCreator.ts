@@ -26,13 +26,13 @@ export class ALStructureCreator implements IDisposable {
   }
 
   async addNewFolder(): Promise<void> {
-    let forldersName: string[] = ["tab, table", "pag, page", "cod, codeunit", "rep, report", "xml, xmlport", "int, interface", "enu, enum", "ent, entitlement", "dnet, dotnet", "pers, permissionset", "tran, translations"];
+    let foldersName: string[] = ["tab, table", "pag, page", "cod, codeunit", "rep, report", "xml, xmlport", "int, interface", "enu, enum", "ent, entitlement", "dnet, dotnet", "pers, permissionset", "tran, translations"];
     const rndInt = Math.floor(Math.random() * 11) + 1;
 
     const options: InputBoxOptions = {
       ignoreFocusOut: true,
       prompt: 'Write the key name of the new folder',
-      placeHolder: forldersName[rndInt],
+      placeHolder: foldersName[rndInt],
       validateInput: this.validate
     };
 
@@ -281,7 +281,7 @@ export class ALStructureCreator implements IDisposable {
     var folderTranslation = this.getFolderTypePath('translation');
     //var folderWebService = this.getFolderTypePath('webservice');
 
-    var fileExt = StructureSettings.GetFileExtensions().getFileExtensons();
+    var fileExt = StructureSettings.GetFileExtensions().getFileExtensions();
     var objTypeName = StructureSettings.GetObjectsIdent().getObjectIdents();
     var handled: boolean;
 
@@ -300,7 +300,7 @@ export class ALStructureCreator implements IDisposable {
     const objIdentXmlport = objTypeName.xmlport;
 
     const rootFolder = this.toAbsolutePath('');
-    const objIdent = StructureSettings.GetobjIdentification();
+    const objIdent = StructureSettings.GetObjIdentification();
 
     try {
       fs.readdirSync(rootFolder).forEach(file => {
