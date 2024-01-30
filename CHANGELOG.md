@@ -4,6 +4,14 @@ All notable changes to the **AL Structure Creator** extension will be documented
 
 ----
 
+## 0.5.0
+
+### Added
+
+- Fixed compile issues.
+
+----
+
 ## 0.4.0
 
 ### Added
