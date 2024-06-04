@@ -1,3 +1,17 @@
-out/
-*.vsix
+# Build and Release Folders
+bin-debug/
+bin-release/
 node_modules/
+out/
+*/.vs/
+
+# Other files and folders
+.settings/
+.vscode*
+
+# Executables
+*.vsix
+
+# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
+# should NOT be excluded as they contain compiler settings and other important
+# information for Eclipse / Flash Builder.

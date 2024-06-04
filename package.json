@@ -9,7 +9,7 @@
 		"url": "https://github.com/edyspider",
 		"email": "dev@edyspider.com"
 	},
-	"version": "0.5.0",
+	"version": "1.7.0",
 	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/edyspider/ALStructureCreator/issues"
@@ -94,8 +94,11 @@
 										},
 										"enum": {
 											"name": "enum",
-											"autocreate": false,
-											"createext": false
+											"autocreate": false
+										},
+										"enumext": {
+											"name": "enumext",
+											"autocreate": false
 										},
 										"interface": {
 											"name": "interface",
@@ -103,14 +106,19 @@
 										},
 										"page": {
 											"name": "page",
-											"autocreate": true,
-											"createcust": true,
-											"createext": false
+											"autocreate": true
+										},
+										"pageext": {
+											"name": "pageext",
+											"autocreate": false
 										},
 										"permissionset": {
 											"name": "permissionset",
-											"autocreate": true,
-											"createext": false
+											"autocreate": true
+										},
+										"permissionsetext": {
+											"name": "permissionsetext",
+											"autocreate": false
 										},
 										"profile": {
 											"name": "profile",
@@ -130,10 +138,17 @@
 												}
 											}
 										},
+										"reportext": {
+											"name": "reportext",
+											"autocreate": false
+										},
 										"table": {
 											"name": "table",
-											"autocreate": true,
-											"createext": false
+											"autocreate": true
+										},
+										"tableext": {
+											"name": "tableext",
+											"autocreate": false
 										},
 										"xmlport": {
 											"name": "xmlport",
@@ -179,8 +194,11 @@
 										},
 										"enum": {
 											"name": "enum",
-											"autocreate": false,
-											"createext": false
+											"autocreate": false
+										},
+										"enumext": {
+											"name": "enumext",
+											"autocreate": false
 										},
 										"interface": {
 											"name": "interface",
@@ -188,14 +206,19 @@
 										},
 										"page": {
 											"name": "page",
-											"autocreate": true,
-											"createcust": true,
-											"createext": false
+											"autocreate": true
+										},
+										"pageExt": {
+											"name": "pageext",
+											"autocreate": false
 										},
 										"permissionset": {
 											"name": "permissionset",
-											"autocreate": true,
-											"createext": false
+											"autocreate": true
+										},
+										"permissionsetext": {
+											"name": "permissionsetext",
+											"autocreate": false
 										},
 										"profile": {
 											"name": "profile",
@@ -215,10 +238,17 @@
 												}
 											}
 										},
+										"reportext": {
+											"name": "reportext",
+											"autocreate": false
+										},
 										"table": {
 											"name": "table",
-											"autocreate": true,
-											"createext": false
+											"autocreate": true
+										},
+										"tableext": {
+											"name": "tableext",
+											"autocreate": false
 										},
 										"xmlport": {
 											"name": "xmlport",
@@ -282,6 +312,11 @@
 						"default": "Enum",
 						"description": "This configuration defines how to identify enum file name."
 					},
+					"ALStructureCreator.ObjectIdent.EnumExt": {
+						"type": "string",
+						"default": "EnumExt",
+						"description": "This configuration defines how to identify enum extension file name."
+					},
 					"ALStructureCreator.ObjectIdent.Interface": {
 						"type": "string",
 						"default": "Interface",
@@ -292,10 +327,20 @@
 						"default": "Page",
 						"description": "This configuration defines how to identify page file name."
 					},
+					"ALStructureCreator.ObjectIdent.PageExt": {
+						"type": "string",
+						"default": "PageExt",
+						"description": "This configuration defines how to identify page extension file name."
+					},
 					"ALStructureCreator.ObjectIdent.PermissionSet": {
 						"type": "string",
 						"default": "PermissionSet",
 						"description": "This configuration defines how to identify permission set file name."
+					},
+					"ALStructureCreator.ObjectIdent.PermissionSetExt": {
+						"type": "string",
+						"default": "PermissionSetExt",
+						"description": "This configuration defines how to identify extension of permission set file name."
 					},
 					"ALStructureCreator.ObjectIdent.Profile": {
 						"type": "string",
@@ -312,10 +357,20 @@
 						"default": "Report",
 						"description": "This configuration defines how to identify report file name."
 					},
+					"ALStructureCreator.ObjectIdent.ReportExt": {
+						"type": "string",
+						"default": "ReportExt",
+						"description": "This configuration defines how to identify report extension file name."
+					},
 					"ALStructureCreator.ObjectIdent.Table": {
 						"type": "string",
 						"default": "Table",
 						"description": "This configuration defines how to identify table file name."
+					},
+					"ALStructureCreator.ObjectIdent.TableExt": {
+						"type": "string",
+						"default": "TableExt",
+						"description": "This configuration defines how to identify table extension file name."
 					},
 					"ALStructureCreator.ObjectIdent.XmlPort": {
 						"type": "string",
@@ -340,10 +395,10 @@
 		"@types/vscode": "^1.41.0",
 		"ansi-regex": ">=5.0.1",
 		"glob": "^7.1.5",
-		"mocha": "^10.1.0",
+		"mocha": "^10.4.0",
 		"tslint": "^5.20.0",
 		"typescript": "^3.6.4",
-		"vscode-test": "^1.2.2"
+		"vscode-test": "^1.6.1"
 	},
 	"repository": {
 		"type": "git",

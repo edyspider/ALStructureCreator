@@ -15,7 +15,6 @@ type ASCFileExtensions = {
 type ASCFolderProperties = {
     create: string;
     cust: string;
-    ext: string;
     name: string;
     subfolder: string;
 };
@@ -24,75 +23,85 @@ interface ASCRootFolders {
     logo: string;
     object: string;
     translation: string;
-    webservice: string;
+    webService: string;
 }
 
 interface ASCObjectFolders {
-    codeunit: string;
-    controladdin: string;
-    dotnet: string;
+    codeUnit: string;
+    controlAddin: string;
+    dotNet: string;
     entitlement: string;
     enum: string;
+    enumExt: string;
     interface: string;
     page: string;
-    permissionset: string;
+    pageExt: string;
+    permissionSet: string;
+    permissionSetExt: string;
     profile: string;
     query: string;
     report: string;
+    reportExt: string;
     layout: string;
     table: string;
-    xmlport: string;
+    tableExt: string;
+    xmlPort: string;
 }
 
 interface ASCObjectIdent {
-    codeunit: string;
-    controladdin: string;
-    dotnet: string;
+    codeUnit: string;
+    controlAddin: string;
+    dotNet: string;
     entitlement: string;
     enum: string;
+    enumExt: string;
     interface: string;
     page: string;
-    permissionset: string;
+    pageExt: string;
+    permissionSet: string;
+    permissionSetExt: string;
     profile: string;
     query: string;
     report: string;
+    reportExt: string;
     table: string;
-    xmlport: string;
+    tableExt: string;
+    xmlPort: string;
 }
 
 export class StructureProperties {
     private folderProp: ASCFolderProperties;
-    private rootEnum: ASCRootFolders;
-    private objectEnum: ASCObjectFolders;
+    private rootFolders: ASCRootFolders;
+    private objectFolders: ASCObjectFolders;
 
     constructor(propFolder: ASCFolderProperties, foldersRoot: ASCRootFolders, foldersObject: ASCObjectFolders) {
         this.folderProp = propFolder;
-        this.rootEnum = foldersRoot;
-        this.objectEnum = foldersObject;
+        this.rootFolders = foldersRoot;
+        this.objectFolders = foldersObject;
     }
 
     public getFolderProperties() {
         return this.folderProp;
     }
 
-    public getRootEnum() {
-        return this.rootEnum;
+    public getRootFolders() {
+        return this.rootFolders;
     }
 
-    public getObjectEnum() {
-        return this.objectEnum;
+    public getObjectFolders() {
+        return this.objectFolders;
     }
 }
 
 export class FileExtensions {
-    private fileExt: ASCFileExtensions;
+    private fileExtList: ASCFileExtensions;
 
     constructor(extFile: ASCFileExtensions) {
-        this.fileExt = extFile;
+        this.fileExtList = extFile;
     }
 
     public getFileExtensions() {
-        return this.fileExt;
+        return this.fileExtList;
     }
 }
 
