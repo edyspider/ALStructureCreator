@@ -4,6 +4,15 @@ All notable changes to the **AL Structure Creator** extension will be documented
 
 ----
 
+## 1.7.0
+
+### Added
+
+- Add object folders extension (pageext, tableext, ..) as part of source folder setup and not as property folder.
+- Update object files reorganization to include object extension folders.
+
+----
+
 ## 0.5.0
 
 ### Added
@@ -92,7 +101,7 @@ All notable changes to the **AL Structure Creator** extension will be documented
 
 ### Added
 
-- New configuration and functionality that allows to create a Layout folder inside application folder Report for all the RDL/RDLC files.
+- New configuration and that allows to create a subfolder inside the report folder for all the layout files (RDL).
 
 ----
 

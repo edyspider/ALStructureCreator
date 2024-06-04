@@ -3,14 +3,12 @@ import * as fs from 'fs';
 import * as vscode from 'vscode';
 
 import { readFileSync, promises as fsPromises } from 'fs';
-import { join } from 'path';
 
 import { InputBoxOptions } from "vscode";
 import { IDisposable } from './disposable.interface';
 import { VSCodeWindow } from './vscode.interfaces';
 import { ALFolderExistsError } from './errors/al-folder-exists.error';
 import { StructureSettings } from './StructureSettings';
-import { exit } from 'process';
 
 export class ALStructureCreator implements IDisposable {
   constructor(
@@ -26,7 +24,7 @@ export class ALStructureCreator implements IDisposable {
   }
 
   async addNewFolder(): Promise<void> {
-    let foldersName: string[] = ["tab, table", "pag, page", "cod, codeunit", "rep, report", "xml, xmlport", "int, interface", "enu, enum", "ent, entitlement", "dnet, dotnet", "pers, permissionset", "tran, translations"];
+    let foldersName: string[] = ["tab, table", "tabext, tableext", "pag, page", "pagext, pageext", "cod, codeunit", "rep, report", "repext, reportext", "xml, xmlport", "int, interface", "enu, enum", "enuext, enumext", "ent, entitlement", "dnet, dotnet", "pers, permissionset", "persext, permissionsetext", "tran, translations"];
     const rndInt = Math.floor(Math.random() * 11) + 1;
 
     const options: InputBoxOptions = {
@@ -41,9 +39,10 @@ export class ALStructureCreator implements IDisposable {
 
     if(newFolder !== "") {
       this.createFolderStructure(newFolder,rootPath,'');
+      this.window.showInformationMessage(`ALStructureCreator: Create Folder Structure Executed`);
+    } else {
+      this.window.showInformationMessage(`ALStructureCreator: No folder set to be executed`);
     }
-
-    this.window.showInformationMessage(`ALStructureCreator: Create Folder Structure Executed`);
   }
 
   createAllFolderStructure(folder: string, subdir: string) {
@@ -69,7 +68,6 @@ export class ALStructureCreator implements IDisposable {
           let folderName: string = "";
           let autoCreate: boolean = false;
           let createCust: boolean = false;
-          let createExt: boolean = false;
           var folderDir;
 
           // check root folders properties
@@ -111,21 +109,6 @@ export class ALStructureCreator implements IDisposable {
             }
           }
 
-          // check create-ext
-          const createExtPath = this.appendProp(rootPath,folderProp.ext);
-          if (vscode.workspace.getConfiguration().has(createExtPath)) {
-            createExt = (<boolean>vscode.workspace.getConfiguration().get(createExtPath));
-          }
-
-          if(createExt) {
-            // check name
-            const folderPath = this.appendProp(rootPath,folderProp.name);
-            if (vscode.workspace.getConfiguration().has(folderPath)) {
-              folderName = `${vscode.workspace.getConfiguration().get(folderPath)}` + 'ext';
-              this.createFolder(folderName,subdir);
-            }
-          }
-
           // check sub-folders
           const subFolderPath = this.appendProp(rootPath,folderProp.subfolder);
           if (vscode.workspace.getConfiguration().has(subFolderPath)) {
@@ -140,23 +123,23 @@ export class ALStructureCreator implements IDisposable {
     }
   }
 
-  createFolderStructure(newFolderKey: string, folder: string, subdir: string) {
-    let rootEnum = StructureSettings.GetStructureProperties().getRootEnum();
-    let objEnum = StructureSettings.GetStructureProperties().getObjectEnum();
+  createFolderStructure(newFolderKey: string, folder: string, subdir: string) {    
+    let rootEnum = StructureSettings.GetStructureProperties().getRootFolders();
+    let objEnum = StructureSettings.GetStructureProperties().getObjectFolders();
     var newFolderDir: string = "";
 
     switch(newFolderKey.toLocaleLowerCase()) {
       case "cod":
       case "codeunit":
-        newFolderDir = this.getFolderTypePath(objEnum.codeunit);
+        newFolderDir = this.getFolderTypePath(objEnum.codeUnit);
         break;
       case "ctrl":
       case "controladdin":
-        newFolderDir = this.getFolderTypePath(objEnum.controladdin);
+        newFolderDir = this.getFolderTypePath(objEnum.controlAddin);
         break;
       case "dnet":
       case "dotnet":
-        newFolderDir = this.getFolderTypePath(objEnum.dotnet);
+        newFolderDir = this.getFolderTypePath(objEnum.dotNet);
         break;
       case "ent":
       case "entitlement":
@@ -165,6 +148,10 @@ export class ALStructureCreator implements IDisposable {
       case "enu":
       case "enum":
         newFolderDir = this.getFolderTypePath(objEnum.enum);
+        break;
+      case "enuext":
+      case "enumext":
+        newFolderDir = this.getFolderTypePath(objEnum.enumExt);
         break;
       case "int":
       case "interface":
@@ -175,12 +162,20 @@ export class ALStructureCreator implements IDisposable {
         newFolderDir = this.getFolderTypePath(objEnum.layout);
         break;
       case "pag":
-      case objEnum.page:
+      case "page":
         newFolderDir = this.getFolderTypePath(objEnum.page);
+        break;
+      case "pagext":
+      case "pageext":
+        newFolderDir = this.getFolderTypePath(objEnum.pageExt);
         break;
       case "pers":
       case "permissionset":
-        newFolderDir = this.getFolderTypePath(objEnum.permissionset);
+        newFolderDir = this.getFolderTypePath(objEnum.permissionSet);
+        break;
+      case "persext":
+      case "permissionsetext":
+        newFolderDir = this.getFolderTypePath(objEnum.permissionSetExt);
         break;
       case "pro":
       case "profile":
@@ -194,13 +189,21 @@ export class ALStructureCreator implements IDisposable {
       case "report":
         newFolderDir = this.getFolderTypePath(objEnum.report);
         break;
+      case "repext":
+      case "reportext":
+        newFolderDir = this.getFolderTypePath(objEnum.reportExt);
+        break;
       case "tab":
       case "table":
         newFolderDir = this.getFolderTypePath(objEnum.table);
         break;
+      case "tabext":
+      case "tableext":
+        newFolderDir = this.getFolderTypePath(objEnum.tableExt);
+        break;
       case "xml":
       case "xmlport":
-        newFolderDir = this.getFolderTypePath(objEnum.xmlport);
+        newFolderDir = this.getFolderTypePath(objEnum.xmlPort);
         break;
       case rootEnum.logo:
         newFolderDir = this.getFolderTypePath(rootEnum.logo);
@@ -215,8 +218,11 @@ export class ALStructureCreator implements IDisposable {
         newFolderDir = this.getFolderTypePath(rootEnum.translation);
         break;
       case "web":
-      case rootEnum.webservice:
-        newFolderDir = this.getFolderTypePath(rootEnum.webservice);
+      case rootEnum.webService:
+        newFolderDir = this.getFolderTypePath(rootEnum.webService);
+        break;
+      default:
+        newFolderDir = newFolderKey;
         break;
     }
 
@@ -271,9 +277,11 @@ export class ALStructureCreator implements IDisposable {
     var folderPage = this.getFolderTypePath('page');
     var folderPageExt = this.getFolderTypePath('page') + 'ext';
     var folderPermissionSet = this.getFolderTypePath('permissionset');
+    var folderPermissionSetExt = this.getFolderTypePath('permissionset') + 'ext';
     var folderProfile = this.getFolderTypePath('profile');
     var folderQuery = this.getFolderTypePath('query');
     var folderReport = this.getFolderTypePath('report');
+    var folderReportExt = this.getFolderTypePath('report') + 'ext';
     var folderLayout = this.getFolderTypePath('layout');
     var folderTable = this.getFolderTypePath('table');
     var folderTableExt = this.getFolderTypePath('table') + 'ext';
@@ -285,19 +293,24 @@ export class ALStructureCreator implements IDisposable {
     var objTypeName = StructureSettings.GetObjectsIdent().getObjectIdents();
     var handled: boolean;
 
-    const objIdentCodeunit = objTypeName.codeunit;
-    const objIdentControlAddin = objTypeName.controladdin;
-    const objIdentDotNet = objTypeName.dotnet;
+    const objIdentCodeunit = objTypeName.codeUnit;
+    const objIdentControlAddin = objTypeName.controlAddin;
+    const objIdentDotNet = objTypeName.dotNet;
     const objIdentEntitlement = objTypeName.entitlement;
     const objIdentEnum = objTypeName.enum;
+    const objIdentEnumExt = objTypeName.enumExt;
     const objIdentInterface = objTypeName.interface;
     const objIdentPage = objTypeName.page;
-    const objIdentPermissionSet = objTypeName.permissionset;
+    const objIdentPageExt = objTypeName.pageExt;
+    const objIdentPermissionSet = objTypeName.permissionSet;
+    const objIdentPermissionSetExt = objTypeName.permissionSetExt;
     const objIdentProfile = objTypeName.profile;
     const objIdentQuery = objTypeName.query;
     const objIdentReport = objTypeName.report;
+    const objIdentReportExt = objTypeName.reportExt;
     const objIdentTable = objTypeName.table;
-    const objIdentXmlport = objTypeName.xmlport;
+    const objIdentTableExt = objTypeName.tableExt;
+    const objIdentXmlport = objTypeName.xmlPort;
 
     const rootFolder = this.toAbsolutePath('');
     const objIdent = StructureSettings.GetObjIdentification();
@@ -313,6 +326,13 @@ export class ALStructureCreator implements IDisposable {
               if(file.startsWith(objIdentPermissionSet)) {
                 this.syncFolderPath(folderPermissionSet);
                 fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderPermissionSet, path.basename(file)));
+              }
+            }
+            // --> PermissionSetExt.xml files
+            if(file.split('.').pop() === fileExt.xml) {
+              if(file.startsWith(objIdentPermissionSetExt)) {
+                this.syncFolderPath(folderPermissionSetExt);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderPermissionSetExt, path.basename(file)));
               }
             }
             
@@ -348,6 +368,12 @@ export class ALStructureCreator implements IDisposable {
                 fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderEnum, path.basename(file)));
               }
 
+              // --> EnumExt
+              if(file.startsWith(objIdentEnumExt)) {
+                this.syncFolderPath(folderEnumExt);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderEnumExt, path.basename(file)));
+              }
+
               // --> Interface
               if(file.startsWith(objIdentInterface)) {
                 this.syncFolderPath(folderInterface);
@@ -359,6 +385,13 @@ export class ALStructureCreator implements IDisposable {
                 this.syncFolderPath(folderPage);
                 fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderPage, path.basename(file)));
               }
+
+              // --> PageExt
+              if(file.startsWith(objIdentPageExt)) {
+                this.syncFolderPath(folderPageExt);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderPageExt, path.basename(file)));
+              }
+
 
               // --> Profile
               if(file.startsWith(objIdentProfile)) {
@@ -378,10 +411,22 @@ export class ALStructureCreator implements IDisposable {
                 fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderReport, path.basename(file)));
               }
 
+              // --> ReportExt
+              if(file.startsWith(objIdentReportExt)) {
+                this.syncFolderPath(folderReportExt);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderReportExt, path.basename(file)));
+              }
+
               // --> Table
               if(file.startsWith(objIdentTable)) {
                 this.syncFolderPath(folderTable);
                 fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderTable, path.basename(file)));
+              }
+
+              // --> TableExt
+              if(file.startsWith(objIdentTableExt)) {
+                this.syncFolderPath(folderTableExt);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderTableExt, path.basename(file)));
               }
 
               // --> Xmlport
@@ -399,6 +444,15 @@ export class ALStructureCreator implements IDisposable {
                 fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderPermissionSet, path.basename(file)));
               }
             }
+
+            // PermissionSetExt.xml files
+            if(file.split('.').pop() === fileExt.xml) {
+              if(file.endsWith(objIdentPermissionSetExt,(fileNameLength-4))) {
+                this.syncFolderPath(folderPermissionSetExt);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderPermissionSetExt, path.basename(file)));
+              }
+            }
+            
 
             // AL files
             if(file.split('.').pop() === fileExt.al) {
@@ -432,6 +486,12 @@ export class ALStructureCreator implements IDisposable {
                 fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderEnum, path.basename(file)));
               }
 
+              // --> EnumExt
+              if(file.endsWith(objIdentEnumExt,(fileNameLength-3))) {
+                this.syncFolderPath(folderEnumExt);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderEnumExt, path.basename(file)));
+              }
+
               // --> Interface
               if(file.endsWith(objIdentInterface,(fileNameLength-3))) {
                 this.syncFolderPath(folderInterface);
@@ -442,6 +502,12 @@ export class ALStructureCreator implements IDisposable {
               if(file.endsWith(objIdentPage,(fileNameLength-3))) {
                 this.syncFolderPath(folderPage);
                 fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderPage, path.basename(file)));
+              }
+
+              // --> PageExt
+              if(file.endsWith(objIdentPageExt,(fileNameLength-3))) {
+                this.syncFolderPath(folderPageExt);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderPageExt, path.basename(file)));
               }
 
               // --> Profile
@@ -462,10 +528,22 @@ export class ALStructureCreator implements IDisposable {
                 fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderReport, path.basename(file)));
               }
 
+              // --> ReportExt
+              if(file.endsWith(objIdentReportExt,(fileNameLength-3))) {
+                this.syncFolderPath(folderReportExt);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderReportExt, path.basename(file)));
+              }
+
               // --> Table
               if(file.endsWith(objIdentTable,(fileNameLength-3))) {
                 this.syncFolderPath(folderTable);
                 fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderTable, path.basename(file)));
+              }
+
+              // --> TableExt
+              if(file.endsWith(objIdentTableExt,(fileNameLength-3))) {
+                this.syncFolderPath(folderTableExt);
+                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderTableExt, path.basename(file)));
               }
 
               // --> Xmlport
@@ -510,6 +588,10 @@ export class ALStructureCreator implements IDisposable {
                   this.syncFolderPath(folderPermissionSet);
                   fs.renameSync(filepath,path.join(folderPermissionSet, path.basename(file)));
                   break;
+                case "permissionsetextension":
+                  this.syncFolderPath(folderPermissionSetExt);
+                  fs.renameSync(filepath,path.join(folderPermissionSetExt, path.basename(file)));
+                  break;
                 case "profile":
                   this.syncFolderPath(folderProfile);
                   fs.renameSync(filepath,path.join(folderProfile, path.basename(file)));
@@ -519,6 +601,10 @@ export class ALStructureCreator implements IDisposable {
                   fs.renameSync(filepath,path.join(folderQuery, path.basename(file)));
                   break;
                 case "report":
+                  this.syncFolderPath(folderReport);
+                  fs.renameSync(filepath,path.join(folderReport, path.basename(file)));
+                  break;
+                case "reportextension":
                   this.syncFolderPath(folderReport);
                   fs.renameSync(filepath,path.join(folderReport, path.basename(file)));
                   break;
@@ -782,6 +868,18 @@ export class ALStructureCreator implements IDisposable {
   appendProp(current: string, property: string): string {
     return (current+'.'+property);
   }
+
+  isSingleFolderProject() {
+        const workspaceFolders = vscode.workspace.workspaceFolders;
+        
+        if (workspaceFolders) {
+            // Check if there is only one workspace folder
+            return workspaceFolders.length === 1;
+        } else {
+            // No workspace folders, likely a single-folder project
+            return true;
+        }
+    }
 }
 
 type FolderType = {
