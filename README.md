@@ -1,3 +1,5 @@
+#
+
 <p align="center">
   <img width="" src="https://raw.githubusercontent.com/edyspider/ALStructureCreator/master/images/banner.png" align="center" alt="GitHub Readme Stats" />
   <h1 align="center">AL Structure Creator</h1>
@@ -47,9 +49,11 @@ You can also customize the standard structure or use other names to create a fol
 This extension contributes the following settings:
 
 * `ALStructureCreator.FolderStructure`: This configuration allows you to define the folder structure for AL projects that best suits you.
-* `ALStructureCreator.ObjectIdentification`: This configuration defines how to identify the objects files, by the object prefix/suffix filename or reading the file. **Prefix**,**Suffix** or **Object** (e.g: `TabEmployeMgt.al`,`EmployeeMgtTab.al`, `..OBJECT Table 50010`).
+* `ALStructureCreator.ObjectIdentification`: This configuration defines how to identify the objects files, by the object prefix/suffix filename or
+reading the file. **Prefix**,**Suffix** or **Object** (e.g: `TabEmployeMgt.al`,`EmployeeMgtTab.al`, `..OBJECT Table 50010`).
 * `ALStructureCreator.ObjectIdent.<ObjectType>`: This configuration defines how to identify a specific object file by its prefix/suffix name.
-* `ALStructureCreator.ObjectIdent.MaxReadLine`: Set this configuration to limit the amount of lines to read when identifying the objet type for the **ReorganizeFiles** action.
+* `ALStructureCreator.ObjectIdent.MaxReadLine`: Set this configuration to limit the amount of lines to read when identifying the objet type for
+the **ReorganizeFiles** action.
 
 The **ObjectIdent**/**ObjectIdentification.** settings are used for the action to reorganize the project files inside a specific folder.
 
@@ -75,7 +79,7 @@ You can add your own structure to the default settings but it's important that y
     <td>Name of the folder when created</td>
   </tr>
   <tr>
-    <td>Auto-Carete</td>
+    <td>Auto-Create</td>
     <td>--true</td>
     <td>To automatically create the folder when call "Create All Folder Structure" command</td>
   </tr>
@@ -96,7 +100,8 @@ You can add your own structure to the default settings but it's important that y
 This extension contributes the following commands:
 
 * `ES: Create All Folder Structure`: This command create all application folder structure for AL projects.
-* `ES: Create Folder Structure`: This command create a defined application folder for AL projects. Follow the allowed application folders/subfolders and shortcut name.
+* `ES: Create Folder Structure`: This command create a defined application folder for AL projects. Follow the allowed application folders/subfolders
+and shortcut name.
 
 <table>
   <tr>
@@ -200,27 +205,21 @@ This extension contributes the following commands:
 
 ---
 
-## Known Issues
-
-There are no reported issues.
-
----
-
 ## Release Notes
 
-Updated release **0.5.x**.
+Updated release **1.7.x**.
 
 ### Added Features
 
-* New configuration in json format that allows to customize the default al folder structure.
-* Reading al files to reorganize the objects in a specific folder.
+* Add object folders extension (pageext, tableext, ..) as part of source folder setup and not as property folder.
+* Update object files reorganization to include object extension folders.
 
 ---
 
 ## Authors
 
 * [**EdySpider**](https://github.com/edyspider/)
-* [**Éder Leal da Silva**](https://github.com/ederlealsilva/)
+* [**Eder Leal da Silva**](https://github.com/ederlealsilva/)
 
 ---
 
