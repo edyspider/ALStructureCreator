@@ -395,7 +395,7 @@
 		"@types/vscode": "^1.41.0",
 		"ansi-regex": ">=5.0.1",
 		"glob": "^7.1.5",
-		"mocha": "^10.4.0",
+		"mocha": "^10.8.2",
 		"tslint": "^5.20.0",
 		"typescript": "^3.6.4",
 		"vscode-test": "^1.6.1"
