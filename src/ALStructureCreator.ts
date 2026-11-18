@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as vscode from 'vscode';
 
-import { readFileSync, promises as fsPromises } from 'fs';
+import { readFileSync } from 'fs';
 
 import { InputBoxOptions } from "vscode";
 import { IDisposable } from './disposable.interface';
@@ -17,14 +17,14 @@ export class ALStructureCreator implements IDisposable {
   ) { }
   
   async execute(): Promise<void> {
-    var rootPath = StructureSettings.GetStructureRootPath();
+    const rootPath = StructureSettings.GetStructureRootPath();
     this.createAllFolderStructure(rootPath,"");
 
     this.window.showInformationMessage(`ALStructureCreator: Create All Folder Structure Executed`);
   }
 
   async addNewFolder(): Promise<void> {
-    let foldersName: string[] = ["tab, table", "tabext, tableext", "pag, page", "pagext, pageext", "cod, codeunit", "rep, report", "repext, reportext", "xml, xmlport", "int, interface", "enu, enum", "enuext, enumext", "ent, entitlement", "dnet, dotnet", "pers, permissionset", "persext, permissionsetext", "tran, translations"];
+    const foldersName: string[] = ["tab, table", "tabext, tableext", "pag, page", "pagext, pageext", "cod, codeunit", "rep, report", "repext, reportext", "xml, xmlport", "int, interface", "enu, enum", "enuext, enumext", "ent, entitlement", "dnet, dotnet", "pers, permissionset", "persext, permissionsetext", "tran, translations"];
     const rndInt = Math.floor(Math.random() * 11) + 1;
 
     const options: InputBoxOptions = {
@@ -34,11 +34,10 @@ export class ALStructureCreator implements IDisposable {
       validateInput: this.validate
     };
 
-    var newFolder = <string>await this.window.showInputBox(options);
-    var rootPath = StructureSettings.GetStructureRootPath();
+    const newFolder = <string>await this.window.showInputBox(options);
 
     if(newFolder !== "") {
-      this.createFolderStructure(newFolder,rootPath,'');
+      this.createFolderStructure(newFolder);
       this.window.showInformationMessage(`ALStructureCreator: Create Folder Structure Executed`);
     } else {
       this.window.showInformationMessage(`ALStructureCreator: No folder set to be executed`);
@@ -46,7 +45,7 @@ export class ALStructureCreator implements IDisposable {
   }
 
   createAllFolderStructure(folder: string, subdir: string) {
-    let folderProp = StructureSettings.GetFolderProperties().getFolderProperties();
+    const folderProp = StructureSettings.GetFolderProperties().getFolderProperties();
 
     if(vscode.workspace.getConfiguration().get(folder)) {
       let inspect;
@@ -56,28 +55,19 @@ export class ALStructureCreator implements IDisposable {
         inspect = vscode.workspace.getConfiguration().inspect(folder)?.globalValue;
       }
 
-      let hasFolders: boolean = false;
-      hasFolders = (<boolean>inspect);
+      const hasFolders = Boolean(inspect);
 
       if(hasFolders) {
-        var obj;
-        obj = JSON.parse(JSON.stringify(inspect));
+        const obj = JSON.parse(JSON.stringify(inspect));
 
-        for(var index in obj) {
-          var root = JSON.parse(JSON.stringify(index));
+        for(const index in obj) {
+          const root = JSON.parse(JSON.stringify(index));
           let folderName: string = "";
           let autoCreate: boolean = false;
           let createCust: boolean = false;
-          var folderDir;
 
           // check root folders properties
           const rootPath = this.appendProp(folder,root);
-          var inspectRoot;
-          if(!vscode.workspace.getConfiguration().inspect(rootPath)?.globalValue) {
-            inspectRoot = vscode.workspace.getConfiguration().inspect(rootPath)?.defaultValue;
-          } else {
-            inspectRoot = vscode.workspace.getConfiguration().inspect(rootPath)?.globalValue;
-          }
 
           // check auto-create
           const autoCreatePath = this.appendProp(rootPath,folderProp.create);
@@ -123,10 +113,10 @@ export class ALStructureCreator implements IDisposable {
     }
   }
 
-  createFolderStructure(newFolderKey: string, folder: string, subdir: string) {    
-    let rootEnum = StructureSettings.GetStructureProperties().getRootFolders();
-    let objEnum = StructureSettings.GetStructureProperties().getObjectFolders();
-    var newFolderDir: string = "";
+  createFolderStructure(newFolderKey: string) {    
+    const rootEnum = StructureSettings.GetStructureProperties().getRootFolders();
+    const objEnum = StructureSettings.GetStructureProperties().getObjectFolders();
+    let newFolderDir: string;
 
     switch(newFolderKey.toLocaleLowerCase()) {
       case "cod":
@@ -245,10 +235,10 @@ export class ALStructureCreator implements IDisposable {
   }
 
   createFolder(folderName: string, subdir: string): boolean {
-    var folderDir;
+    let folderDir;
 
     try {
-      let absolutePath = this.toAbsolutePath(subdir);
+      const absolutePath = this.toAbsolutePath(subdir);
       folderDir = path.join(absolutePath, folderName);
 
       if(!fs.existsSync(folderDir)) {
@@ -266,32 +256,31 @@ export class ALStructureCreator implements IDisposable {
   }  
 
   reorganizeAppFiles() {
-    var folderLogo = this.getFolderTypePath('logo');
-    var folderCodeunit = this.getFolderTypePath('codeunit');
-    var folderControlAddin = this.getFolderTypePath('controladdin');
-    var folderDotNet = this.getFolderTypePath('dotnet');
-    var folderEntitlement = this.getFolderTypePath('entitlement');
-    var folderEnum = this.getFolderTypePath('enum');
-    var folderEnumExt = this.getFolderTypePath('enum') + 'ext';
-    var folderInterface = this.getFolderTypePath('interface');
-    var folderPage = this.getFolderTypePath('page');
-    var folderPageExt = this.getFolderTypePath('page') + 'ext';
-    var folderPermissionSet = this.getFolderTypePath('permissionset');
-    var folderPermissionSetExt = this.getFolderTypePath('permissionset') + 'ext';
-    var folderProfile = this.getFolderTypePath('profile');
-    var folderQuery = this.getFolderTypePath('query');
-    var folderReport = this.getFolderTypePath('report');
-    var folderReportExt = this.getFolderTypePath('report') + 'ext';
-    var folderLayout = this.getFolderTypePath('layout');
-    var folderTable = this.getFolderTypePath('table');
-    var folderTableExt = this.getFolderTypePath('table') + 'ext';
-    var folderXmlport = this.getFolderTypePath('xmlport');
-    var folderTranslation = this.getFolderTypePath('translation');
+    const folderLogo = this.getFolderTypePath('logo');
+    const folderCodeunit = this.getFolderTypePath('codeunit');
+    const folderControlAddin = this.getFolderTypePath('controladdin');
+    const folderDotNet = this.getFolderTypePath('dotnet');
+    const folderEntitlement = this.getFolderTypePath('entitlement');
+    const folderEnum = this.getFolderTypePath('enum');
+    const folderEnumExt = this.getFolderTypePath('enum') + 'ext';
+    const folderInterface = this.getFolderTypePath('interface');
+    const folderPage = this.getFolderTypePath('page');
+    const folderPageExt = this.getFolderTypePath('page') + 'ext';
+    const folderPermissionSet = this.getFolderTypePath('permissionset');
+    const folderPermissionSetExt = this.getFolderTypePath('permissionset') + 'ext';
+    const folderProfile = this.getFolderTypePath('profile');
+    const folderQuery = this.getFolderTypePath('query');
+    const folderReport = this.getFolderTypePath('report');
+    const folderReportExt = this.getFolderTypePath('report') + 'ext';
+    const folderLayout = this.getFolderTypePath('layout');
+    const folderTable = this.getFolderTypePath('table');
+    const folderTableExt = this.getFolderTypePath('table') + 'ext';
+    const folderXmlport = this.getFolderTypePath('xmlport');
+    const folderTranslation = this.getFolderTypePath('translation');
     //var folderWebService = this.getFolderTypePath('webservice');
 
-    var fileExt = StructureSettings.GetFileExtensions().getFileExtensions();
-    var objTypeName = StructureSettings.GetObjectsIdent().getObjectIdents();
-    var handled: boolean;
+    const fileExt = StructureSettings.GetFileExtensions().getFileExtensions();
+    const objTypeName = StructureSettings.GetObjectsIdent().getObjectIdents();
 
     const objIdentCodeunit = objTypeName.codeUnit;
     const objIdentControlAddin = objTypeName.controlAddin;
@@ -317,8 +306,7 @@ export class ALStructureCreator implements IDisposable {
 
     try {
       fs.readdirSync(rootFolder).forEach(file => {
-        handled = false;
-        var fileNameLength = file.length;
+        const fileNameLength = file.length;
         switch(objIdent) {
           case "Prefix":
             // --> PermissionSet.xml files
@@ -556,8 +544,8 @@ export class ALStructureCreator implements IDisposable {
           case "Object":
             // AL files
             if(file.split('.').pop() === fileExt.al) {
-              let filepath = path.join(rootFolder, path.basename(file));
-              let objType = this.getAlObjectType(filepath);
+              const filepath = path.join(rootFolder, path.basename(file));
+              const objType = this.getAlObjectType(filepath);
 
               switch(objType) {
                 case "codeunit":
@@ -662,7 +650,7 @@ export class ALStructureCreator implements IDisposable {
     const result = readFileSync(filename, 'utf-8');
     const maxReadLine = StructureSettings.GetObjectMaxReadLine();
 
-    let textLine = "";
+    let textLine: string;
     let objFound = "";
     let i = 0;
     let foundObj = false;
@@ -729,9 +717,9 @@ export class ALStructureCreator implements IDisposable {
   }
 
   getFolderTypePath(folderType: string): string {
-    var folderLevels: string[] = [];
-    var folder = StructureSettings.GetStructureRootPath();
-    var folderPath: FolderType = {currentFolder:folder, folderFound: false};
+    const folderLevels: string[] = [];
+    const folder = StructureSettings.GetStructureRootPath();
+    let folderPath: FolderType = {currentFolder:folder, folderFound: false};
     folderPath = this.searchFolderTypePath(folderType,folder,0,folderLevels,folderPath);
     if(folderPath.folderFound) {
       return folderPath.currentFolder;
@@ -741,7 +729,7 @@ export class ALStructureCreator implements IDisposable {
   }
 
   searchFolderTypePath(folderType: string, folder:string, level: number, folderLevels: string[], currFolderType: FolderType): FolderType {
-    let folderProp = StructureSettings.GetFolderProperties().getFolderProperties();
+    const folderProp = StructureSettings.GetFolderProperties().getFolderProperties();
     //var currFolder: string = '';
 
     if(vscode.workspace.getConfiguration().get(folder)) {
@@ -752,7 +740,7 @@ export class ALStructureCreator implements IDisposable {
         inspect = vscode.workspace.getConfiguration().inspect(folder)?.globalValue;
       }
 
-      var rootFolder = this.toAbsolutePath('');
+      let rootFolder = this.toAbsolutePath('');
       switch(level) {
         case 1:
           rootFolder = path.join(rootFolder, folderLevels[0]);
@@ -776,19 +764,13 @@ export class ALStructureCreator implements IDisposable {
       currFolderType.currentFolder = rootFolder;
       
 
-      var obj = JSON.parse(JSON.stringify(inspect));
-      for(var index in obj) {
-        var root = JSON.parse(JSON.stringify(index));
+      const obj = JSON.parse(JSON.stringify(inspect));
+      for(const index in obj) {
+        const root = JSON.parse(JSON.stringify(index));
         let folderName: string = "";
 
         // check root folders properties
         const rootPath = this.appendProp(folder,root);
-        var inspectRoot;
-        if(!vscode.workspace.getConfiguration().inspect(rootPath)?.globalValue) {
-          inspectRoot = vscode.workspace.getConfiguration().inspect(rootPath)?.defaultValue;
-        } else {
-          inspectRoot = vscode.workspace.getConfiguration().inspect(rootPath)?.globalValue;
-        }
             
         // check name
         const configPath = this.appendProp(rootPath,folderProp.name);
@@ -842,8 +824,8 @@ export class ALStructureCreator implements IDisposable {
       return 'Blank spaces are not allowed';
     }
     
-    var regex = /^[A-Za-z0-9 ]+$/;
-    var isValid = regex.test(name);
+    const regex = /^[A-Za-z0-9 ]+$/;
+    const isValid = regex.test(name);
     if (!isValid) {
       return 'Special characters are not allowed';
     }

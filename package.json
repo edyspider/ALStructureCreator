@@ -379,13 +379,16 @@
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./"
+		"watch": "tsc -watch -p ./",
+		"lint": "eslint src"
 	},
 	"devDependencies": {
+		"@eslint/js": "^10.0.1",
 		"@types/node": "^20.19.43",
 		"@types/vscode": "^1.95.0",
-		"tslint": "^5.20.0",
-		"typescript": "~6.0.3"
+		"eslint": "^10.15.0",
+		"typescript": "~6.0.3",
+		"typescript-eslint": "^8.73.0"
 	},
 	"repository": {
 		"type": "git",

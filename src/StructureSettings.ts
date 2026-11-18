@@ -73,7 +73,7 @@ export class StructureSettings {
     private static objIdentTableExt = vscode.workspace.getConfiguration().get('ALStructureCreator.ObjectIdent.TableExt');
     private static objIdentXmlPort = vscode.workspace.getConfiguration().get('ALStructureCreator.ObjectIdent.XmlPort');
 
-    public static ValidateFolderBeforeCreate(): Boolean {
+    public static ValidateFolderBeforeCreate(): boolean {
         return Boolean(false);
     }
 
@@ -106,7 +106,7 @@ export class StructureSettings {
     }
 
     public static GetFileExtensions() : FileExtensions {
-        let fileExt = {
+        const fileExt = {
             al: this.fileExtAl,
             docx: this.fileExtDocx,
             gif: this.fileExtGif,
@@ -120,26 +120,26 @@ export class StructureSettings {
             xml: this.fileExtXml
         };
 
-        let extensions: FileExtensions = new FileExtensions(fileExt);
+        const extensions: FileExtensions = new FileExtensions(fileExt);
 
         return extensions;
     }
 
     public static GetFolderProperties() : FolderProperties {
-        let attr = {
+        const attr = {
             create: this.folderPropCreate,
             cust: this.folderPropCust,
             name: this.folderPropName,
             subfolder: this.folderPropSubFolder
         };
 
-        let attributes: FolderProperties = new FolderProperties(attr);
+        const attributes: FolderProperties = new FolderProperties(attr);
 
         return attributes;
     }
 
     public static GetObjectsIdent() : ObjectIdent {
-        let objects = {
+        const objects = {
             codeUnit: <string>this.objIdentCodeUnit,
             controlAddin: <string>this.objIdentControlAddin,
             dotNet: <string>this.objIdentDotNet,
@@ -160,25 +160,25 @@ export class StructureSettings {
             xmlPort: <string>this.objIdentXmlPort
         };
 
-        let idents: ObjectIdent = new ObjectIdent(objects);
+        const idents: ObjectIdent = new ObjectIdent(objects);
 
         return idents;
     }
 
     public static GetStructureProperties() : StructureProperties {
-        let folder = {
+        const folder = {
             create: this.folderPropCreate,
             cust: this.folderPropCust,
             name: this.folderPropName,
             subfolder: this.folderPropSubFolder
         };
-        let roots = {
+        const roots = {
             logo: this.rootEnumLogo,
             object: this.rootEnumObject,
             translation: this.rootEnumTranslation,
             webService: this.rootEnumWebService
         };
-        let objects = {
+        const objects = {
             codeUnit: this.objEnumCodeUnit,
             controlAddin: this.objEnumControlAddin,
             dotNet: this.objEnumDotNet,
@@ -200,7 +200,7 @@ export class StructureSettings {
             xmlPort: this.objEnumXmlPort
         };
 
-        let properties: StructureProperties = new StructureProperties(folder, roots, objects);
+        const properties: StructureProperties = new StructureProperties(folder, roots, objects);
 
         return properties;
     }
