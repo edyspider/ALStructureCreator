@@ -2,7 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { workspace, window } from 'vscode';
-import { ALStructureCreator } from './ALStructureCreator';
+import { ALStructureCreator } from './al-structure-creator';
 import { getWorkspaceFolder } from './utils/workspace-util';
 
 // this method is called when your extension is activated

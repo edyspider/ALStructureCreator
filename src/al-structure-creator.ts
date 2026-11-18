@@ -8,7 +8,7 @@ import { InputBoxOptions } from "vscode";
 import { IDisposable } from './disposable.interface';
 import { VSCodeWindow } from './vscode.interfaces';
 import { ALFolderExistsError } from './errors/al-folder-exists.error';
-import { StructureSettings } from './StructureSettings';
+import { StructureSettings } from './structure-settings';
 
 export class ALStructureCreator implements IDisposable {
   constructor(
@@ -17,7 +17,7 @@ export class ALStructureCreator implements IDisposable {
   ) { }
   
   async execute(): Promise<void> {
-    const rootPath = StructureSettings.GetStructureRootPath();
+    const rootPath = StructureSettings.getStructureRootPath();
     this.createAllFolderStructure(rootPath,"");
 
     this.window.showInformationMessage(`ALStructureCreator: Create All Folder Structure Executed`);
@@ -45,15 +45,10 @@ export class ALStructureCreator implements IDisposable {
   }
 
   createAllFolderStructure(folder: string, subdir: string) {
-    const folderProp = StructureSettings.GetFolderProperties().getFolderProperties();
+    const folderProp = StructureSettings.getFolderProperties();
 
     if(vscode.workspace.getConfiguration().get(folder)) {
-      let inspect;
-      if(!vscode.workspace.getConfiguration().inspect(folder)?.globalValue) {
-        inspect = vscode.workspace.getConfiguration().inspect(folder)?.defaultValue;
-      } else {
-        inspect = vscode.workspace.getConfiguration().inspect(folder)?.globalValue;
-      }
+      const inspect = vscode.workspace.getConfiguration().get(folder);
 
       const hasFolders = Boolean(inspect);
 
@@ -114,8 +109,8 @@ export class ALStructureCreator implements IDisposable {
   }
 
   createFolderStructure(newFolderKey: string) {    
-    const rootEnum = StructureSettings.GetStructureProperties().getRootFolders();
-    const objEnum = StructureSettings.GetStructureProperties().getObjectFolders();
+    const rootEnum = StructureSettings.getRootFolders();
+    const objEnum = StructureSettings.getObjectFolders();
     let newFolderDir: string;
 
     switch(newFolderKey.toLocaleLowerCase()) {
@@ -279,8 +274,8 @@ export class ALStructureCreator implements IDisposable {
     const folderTranslation = this.getFolderTypePath('translation');
     //var folderWebService = this.getFolderTypePath('webservice');
 
-    const fileExt = StructureSettings.GetFileExtensions().getFileExtensions();
-    const objTypeName = StructureSettings.GetObjectsIdent().getObjectIdents();
+    const fileExt = StructureSettings.getFileExtensions();
+    const objTypeName = StructureSettings.getObjectIdents();
 
     const objIdentCodeunit = objTypeName.codeUnit;
     const objIdentControlAddin = objTypeName.controlAddin;
@@ -302,7 +297,7 @@ export class ALStructureCreator implements IDisposable {
     const objIdentXmlport = objTypeName.xmlPort;
 
     const rootFolder = this.toAbsolutePath('');
-    const objIdent = StructureSettings.GetObjIdentification();
+    const objIdent = StructureSettings.getObjectIdentification();
 
     try {
       fs.readdirSync(rootFolder).forEach(file => {
@@ -648,7 +643,7 @@ export class ALStructureCreator implements IDisposable {
 
   getAlObjectType(filename: string): string {
     const result = readFileSync(filename, 'utf-8');
-    const maxReadLine = StructureSettings.GetObjectMaxReadLine();
+    const maxReadLine = StructureSettings.getObjectMaxReadLine();
 
     let textLine: string;
     let objFound = "";
@@ -718,7 +713,7 @@ export class ALStructureCreator implements IDisposable {
 
   getFolderTypePath(folderType: string): string {
     const folderLevels: string[] = [];
-    const folder = StructureSettings.GetStructureRootPath();
+    const folder = StructureSettings.getStructureRootPath();
     let folderPath: FolderType = {currentFolder:folder, folderFound: false};
     folderPath = this.searchFolderTypePath(folderType,folder,0,folderLevels,folderPath);
     if(folderPath.folderFound) {
@@ -729,16 +724,11 @@ export class ALStructureCreator implements IDisposable {
   }
 
   searchFolderTypePath(folderType: string, folder:string, level: number, folderLevels: string[], currFolderType: FolderType): FolderType {
-    const folderProp = StructureSettings.GetFolderProperties().getFolderProperties();
+    const folderProp = StructureSettings.getFolderProperties();
     //var currFolder: string = '';
 
     if(vscode.workspace.getConfiguration().get(folder)) {
-      let inspect;
-      if(!vscode.workspace.getConfiguration().inspect(folder)?.globalValue) {
-        inspect = vscode.workspace.getConfiguration().inspect(folder)?.defaultValue;
-      } else {
-        inspect = vscode.workspace.getConfiguration().inspect(folder)?.globalValue;
-      }
+      const inspect = vscode.workspace.getConfiguration().get(folder);
 
       let rootFolder = this.toAbsolutePath('');
       switch(level) {
