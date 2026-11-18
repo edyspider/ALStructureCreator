@@ -1,6 +1,6 @@
 import { WorkspaceFolder } from "vscode";
 
-export const getWorkspaceFolder = (folders: WorkspaceFolder[] | undefined): string => {
+export const getWorkspaceFolder = (folders: readonly WorkspaceFolder[] | undefined): string => {
   if (!folders) {
     return '';
   }

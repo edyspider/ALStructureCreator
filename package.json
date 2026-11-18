@@ -25,13 +25,8 @@
 		"Dynamics NAV"
 	],
 	"engines": {
-		"vscode": "^1.41.0"
+		"vscode": "^1.95.0"
 	},
-	"activationEvents": [
-		"onCommand:alstructurecreator.createallstructure",
-		"onCommand:alstructurecreator.createstructure",
-		"onCommand:alstructurecreator.reorganizefiles"
-	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
@@ -384,21 +379,13 @@
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"pretest": "npm run compile",
-		"test": "node ./out/test/runTest.js"
+		"watch": "tsc -watch -p ./"
 	},
 	"devDependencies": {
-		"@types/glob": "^7.1.1",
-		"@types/mocha": "^5.2.7",
-		"@types/node": "^12.20.55",
-		"@types/vscode": "^1.41.0",
-		"ansi-regex": ">=5.0.1",
-		"glob": "^7.1.5",
-		"mocha": "^10.8.2",
+		"@types/node": "^20.19.43",
+		"@types/vscode": "^1.95.0",
 		"tslint": "^5.20.0",
-		"typescript": "^3.6.4",
-		"vscode-test": "^1.6.1"
+		"typescript": "~6.0.3"
 	},
 	"repository": {
 		"type": "git",
