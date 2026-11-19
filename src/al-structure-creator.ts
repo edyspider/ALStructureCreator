@@ -25,7 +25,7 @@ export class ALStructureCreator implements IDisposable {
 
   async addNewFolder(): Promise<void> {
     const foldersName: string[] = ["tab, table", "tabext, tableext", "pag, page", "pagext, pageext", "cod, codeunit", "rep, report", "repext, reportext", "xml, xmlport", "int, interface", "enu, enum", "enuext, enumext", "ent, entitlement", "dnet, dotnet", "pers, permissionset", "persext, permissionsetext", "tran, translations"];
-    const rndInt = Math.floor(Math.random() * 11) + 1;
+    const rndInt = Math.floor(Math.random() * foldersName.length);
 
     const options: InputBoxOptions = {
       ignoreFocusOut: true,
@@ -34,13 +34,15 @@ export class ALStructureCreator implements IDisposable {
       validateInput: this.validate
     };
 
-    const newFolder = <string>await this.window.showInputBox(options);
+    const newFolder = await this.window.showInputBox(options);
 
-    if(newFolder !== "") {
-      this.createFolderStructure(newFolder);
-      this.window.showInformationMessage(`ALStructureCreator: Create Folder Structure Executed`);
-    } else {
+    if (!newFolder) {
       this.window.showInformationMessage(`ALStructureCreator: No folder set to be executed`);
+      return;
+    }
+
+    if (this.createFolderStructure(newFolder)) {
+      this.window.showInformationMessage(`ALStructureCreator: Create Folder Structure Executed`);
     }
   }
 
@@ -108,7 +110,7 @@ export class ALStructureCreator implements IDisposable {
     }
   }
 
-  createFolderStructure(newFolderKey: string) {    
+  createFolderStructure(newFolderKey: string): boolean {
     const rootEnum = StructureSettings.getRootFolders();
     const objEnum = StructureSettings.getObjectFolders();
     let newFolderDir: string;
@@ -207,25 +209,28 @@ export class ALStructureCreator implements IDisposable {
         newFolderDir = this.getFolderTypePath(rootEnum.webService);
         break;
       default:
-        newFolderDir = newFolderKey;
+        newFolderDir = this.getFolderTypePath(newFolderKey) || path.join(this.workspaceRoot, newFolderKey);
         break;
     }
 
+    if (newFolderDir === "") {
+      this.window.showErrorMessage(`ALStructureCreator Error: folder '${newFolderKey}' was not found in the FolderStructure setting.`);
+      return false;
+    }
+
     try {
-      if(newFolderDir !== "") {
-        if(!fs.existsSync(newFolderDir)) {
-          fs.mkdirSync(newFolderDir, { recursive: true });
-          console.log(`Folder ${newFolderDir} created`);
-        } else {
-          throw new ALFolderExistsError(`Folder '${newFolderKey}' already exists`);
-        }
+      if (fs.existsSync(newFolderDir)) {
+        throw new ALFolderExistsError(`Folder '${newFolderKey}' already exists`);
       }
+      fs.mkdirSync(newFolderDir, { recursive: true });
+      return true;
     } catch (err) {
       if (err instanceof ALFolderExistsError) {
         this.window.showErrorMessage(`ALStructureCreator Error: '${err.message}'.`);
       } else {
         this.window.showErrorMessage(`Error: ${(err as Error).message}`);
       }
+      return false;
     }
   }
 

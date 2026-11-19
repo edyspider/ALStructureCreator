@@ -203,7 +203,7 @@
 											"name": "page",
 											"autocreate": true
 										},
-										"pageExt": {
+										"pageext": {
 											"name": "pageext",
 											"autocreate": false
 										},

@@ -1,31 +1,28 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import { workspace, window } from 'vscode';
 import { ALStructureCreator } from './al-structure-creator';
 import { getWorkspaceFolder } from './utils/workspace-util';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
-	const workspaceRoot: string = getWorkspaceFolder(workspace.workspaceFolders);
-	const generator = new ALStructureCreator(workspaceRoot, window);
-
-	const disposable = vscode.commands.registerCommand('alstructurecreator.createallstructure', () => {
-		generator.execute();
-	});
-	const disposableFolder = vscode.commands.registerCommand('alstructurecreator.createstructure', () => {
-		generator.addNewFolder();
-	});
-	const disposableReOrganize = vscode.commands.registerCommand('alstructurecreator.reorganizefiles', () => {
-		generator.reorganizeAppFiles();
-	});
-
-	context.subscriptions.push(disposable);
-	context.subscriptions.push(disposableFolder);
-	context.subscriptions.push(disposableReOrganize);
-	context.subscriptions.push(generator);
+// Called the first time one of the extension's commands runs.
+export function activate(context: vscode.ExtensionContext): void {
+  context.subscriptions.push(
+    vscode.commands.registerCommand('alstructurecreator.createallstructure', () => createGenerator()?.execute()),
+    vscode.commands.registerCommand('alstructurecreator.createstructure', () => createGenerator()?.addNewFolder()),
+    vscode.commands.registerCommand('alstructurecreator.reorganizefiles', () => createGenerator()?.reorganizeAppFiles()),
+  );
 }
 
-// this method is called when your extension is deactivated
-export function deactivate() {}
+// Called when the extension is deactivated.
+export function deactivate(): void {}
+
+/**
+ * Creates the generator for the first workspace folder at the moment the
+ * command runs, or shows an error when no folder is open.
+ */
+function createGenerator(): ALStructureCreator | undefined {
+  const workspaceRoot = getWorkspaceFolder(vscode.workspace.workspaceFolders);
+  if (!workspaceRoot) {
+    vscode.window.showErrorMessage('ALStructureCreator: open a folder or workspace first.');
+    return undefined;
+  }
+  return new ALStructureCreator(workspaceRoot, vscode.window);
+}
