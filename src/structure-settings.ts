@@ -41,21 +41,6 @@ export interface ObjectFolders {
   xmlPort: string;
 }
 
-/** File extensions handled by the "Reorganize Files" command. */
-export interface FileExtensions {
-  al: string;
-  docx: string;
-  gif: string;
-  icon: string;
-  jpg: string;
-  png: string;
-  rdl: string;
-  rdlc: string;
-  xlf: string;
-  xlsx: string;
-  xml: string;
-}
-
 /** File name prefixes/suffixes that identify each object type. */
 export interface ObjectIdents {
   codeUnit: string;
@@ -139,22 +124,6 @@ export class StructureSettings {
       table: 'table',
       tableExt: 'tableext',
       xmlPort: 'xmlport',
-    };
-  }
-
-  public static getFileExtensions(): FileExtensions {
-    return {
-      al: 'al',
-      docx: 'docx',
-      gif: 'gif',
-      icon: 'icon',
-      jpg: 'jpg',
-      png: 'png',
-      rdl: 'rdl',
-      rdlc: 'rdlc',
-      xlf: 'xlf',
-      xlsx: 'xlsx',
-      xml: 'xml',
     };
   }
 

@@ -2,13 +2,12 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as vscode from 'vscode';
 
-import { readFileSync } from 'fs';
-
 import { InputBoxOptions } from "vscode";
 import { IDisposable } from './disposable.interface';
 import { VSCodeWindow } from './vscode.interfaces';
 import { ALFolderExistsError } from './errors/al-folder-exists.error';
-import { StructureSettings } from './structure-settings';
+import { StructureSettings, ObjectIdents } from './structure-settings';
+import { IdentificationMode, detectObjectType, matchFileName, matchResourceFolder } from './object-types';
 
 export class ALStructureCreator implements IDisposable {
   constructor(
@@ -253,467 +252,69 @@ export class ALStructureCreator implements IDisposable {
     }
 
     return false;
-  }  
-
-  reorganizeAppFiles() {
-    const folderLogo = this.getFolderTypePath('logo');
-    const folderCodeunit = this.getFolderTypePath('codeunit');
-    const folderControlAddin = this.getFolderTypePath('controladdin');
-    const folderDotNet = this.getFolderTypePath('dotnet');
-    const folderEntitlement = this.getFolderTypePath('entitlement');
-    const folderEnum = this.getFolderTypePath('enum');
-    const folderEnumExt = this.getFolderTypePath('enum') + 'ext';
-    const folderInterface = this.getFolderTypePath('interface');
-    const folderPage = this.getFolderTypePath('page');
-    const folderPageExt = this.getFolderTypePath('page') + 'ext';
-    const folderPermissionSet = this.getFolderTypePath('permissionset');
-    const folderPermissionSetExt = this.getFolderTypePath('permissionset') + 'ext';
-    const folderProfile = this.getFolderTypePath('profile');
-    const folderQuery = this.getFolderTypePath('query');
-    const folderReport = this.getFolderTypePath('report');
-    const folderReportExt = this.getFolderTypePath('report') + 'ext';
-    const folderLayout = this.getFolderTypePath('layout');
-    const folderTable = this.getFolderTypePath('table');
-    const folderTableExt = this.getFolderTypePath('table') + 'ext';
-    const folderXmlport = this.getFolderTypePath('xmlport');
-    const folderTranslation = this.getFolderTypePath('translation');
-    //var folderWebService = this.getFolderTypePath('webservice');
-
-    const fileExt = StructureSettings.getFileExtensions();
-    const objTypeName = StructureSettings.getObjectIdents();
-
-    const objIdentCodeunit = objTypeName.codeUnit;
-    const objIdentControlAddin = objTypeName.controlAddin;
-    const objIdentDotNet = objTypeName.dotNet;
-    const objIdentEntitlement = objTypeName.entitlement;
-    const objIdentEnum = objTypeName.enum;
-    const objIdentEnumExt = objTypeName.enumExt;
-    const objIdentInterface = objTypeName.interface;
-    const objIdentPage = objTypeName.page;
-    const objIdentPageExt = objTypeName.pageExt;
-    const objIdentPermissionSet = objTypeName.permissionSet;
-    const objIdentPermissionSetExt = objTypeName.permissionSetExt;
-    const objIdentProfile = objTypeName.profile;
-    const objIdentQuery = objTypeName.query;
-    const objIdentReport = objTypeName.report;
-    const objIdentReportExt = objTypeName.reportExt;
-    const objIdentTable = objTypeName.table;
-    const objIdentTableExt = objTypeName.tableExt;
-    const objIdentXmlport = objTypeName.xmlPort;
-
-    const rootFolder = this.toAbsolutePath('');
-    const objIdent = StructureSettings.getObjectIdentification();
-
-    try {
-      fs.readdirSync(rootFolder).forEach(file => {
-        const fileNameLength = file.length;
-        switch(objIdent) {
-          case "Prefix":
-            // --> PermissionSet.xml files
-            if(file.split('.').pop() === fileExt.xml) {
-              if(file.startsWith(objIdentPermissionSet)) {
-                this.syncFolderPath(folderPermissionSet);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderPermissionSet, path.basename(file)));
-              }
-            }
-            // --> PermissionSetExt.xml files
-            if(file.split('.').pop() === fileExt.xml) {
-              if(file.startsWith(objIdentPermissionSetExt)) {
-                this.syncFolderPath(folderPermissionSetExt);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderPermissionSetExt, path.basename(file)));
-              }
-            }
-            
-            // AL files
-            if(file.split('.').pop() === fileExt.al) {
-              // --> Codeunit
-              if(file.startsWith(objIdentCodeunit)) {
-                this.syncFolderPath(folderCodeunit);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderCodeunit, path.basename(file)));
-              }
-
-              // --> ControlAddin
-              if(file.startsWith(objIdentControlAddin)) {
-                this.syncFolderPath(folderControlAddin);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderControlAddin, path.basename(file)));
-              }
-
-              // --> DotNet
-              if(file.startsWith(objIdentDotNet)) {
-                this.syncFolderPath(folderDotNet);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderDotNet, path.basename(file)));
-              }
-
-              // --> Entitlement
-              if(file.startsWith(objIdentEntitlement)) {
-                this.syncFolderPath(folderEntitlement);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderEntitlement, path.basename(file)));
-              }
-
-              // --> Enum
-              if(file.startsWith(objIdentEnum)) {
-                this.syncFolderPath(folderEnum);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderEnum, path.basename(file)));
-              }
-
-              // --> EnumExt
-              if(file.startsWith(objIdentEnumExt)) {
-                this.syncFolderPath(folderEnumExt);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderEnumExt, path.basename(file)));
-              }
-
-              // --> Interface
-              if(file.startsWith(objIdentInterface)) {
-                this.syncFolderPath(folderInterface);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderInterface, path.basename(file)));
-              }
-
-              // --> Page
-              if(file.startsWith(objIdentPage)) {
-                this.syncFolderPath(folderPage);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderPage, path.basename(file)));
-              }
-
-              // --> PageExt
-              if(file.startsWith(objIdentPageExt)) {
-                this.syncFolderPath(folderPageExt);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderPageExt, path.basename(file)));
-              }
-
-
-              // --> Profile
-              if(file.startsWith(objIdentProfile)) {
-                this.syncFolderPath(folderProfile);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderProfile, path.basename(file)));
-              }
-
-              // --> Query
-              if(file.startsWith(objIdentQuery)) {
-                this.syncFolderPath(folderQuery);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderQuery, path.basename(file)));
-              }
-
-              // --> Report
-              if(file.startsWith(objIdentReport)) {
-                this.syncFolderPath(folderReport);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderReport, path.basename(file)));
-              }
-
-              // --> ReportExt
-              if(file.startsWith(objIdentReportExt)) {
-                this.syncFolderPath(folderReportExt);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderReportExt, path.basename(file)));
-              }
-
-              // --> Table
-              if(file.startsWith(objIdentTable)) {
-                this.syncFolderPath(folderTable);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderTable, path.basename(file)));
-              }
-
-              // --> TableExt
-              if(file.startsWith(objIdentTableExt)) {
-                this.syncFolderPath(folderTableExt);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderTableExt, path.basename(file)));
-              }
-
-              // --> Xmlport
-              if(file.startsWith(objIdentXmlport)) {
-                this.syncFolderPath(folderXmlport);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderXmlport, path.basename(file)));
-              }
-            }
-            break;
-          case "Suffix":
-            // PermissionSet.xml files
-            if(file.split('.').pop() === fileExt.xml) {
-              if(file.endsWith(objIdentPermissionSet,(fileNameLength-4))) {
-                this.syncFolderPath(folderPermissionSet);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderPermissionSet, path.basename(file)));
-              }
-            }
-
-            // PermissionSetExt.xml files
-            if(file.split('.').pop() === fileExt.xml) {
-              if(file.endsWith(objIdentPermissionSetExt,(fileNameLength-4))) {
-                this.syncFolderPath(folderPermissionSetExt);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderPermissionSetExt, path.basename(file)));
-              }
-            }
-            
-
-            // AL files
-            if(file.split('.').pop() === fileExt.al) {
-              // --> Codeunit
-              if(file.endsWith(objIdentCodeunit,(fileNameLength-3))) {
-                this.syncFolderPath(folderCodeunit);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderCodeunit, path.basename(file)));
-              }
-
-              // --> ControlAddin
-              if(file.endsWith(objIdentControlAddin,(fileNameLength-3))) {
-                this.syncFolderPath(folderControlAddin);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderControlAddin, path.basename(file)));
-              }
-
-              // --> DotNet
-              if(file.endsWith(objIdentDotNet,(fileNameLength-3))) {
-                this.syncFolderPath(folderDotNet);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderDotNet, path.basename(file)));
-              }
-
-              // --> Entitlement
-              if(file.endsWith(objIdentEntitlement,(fileNameLength-3))) {
-                this.syncFolderPath(folderEntitlement);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderEntitlement, path.basename(file)));
-              }
-
-              // --> Enum
-              if(file.endsWith(objIdentEnum,(fileNameLength-3))) {
-                this.syncFolderPath(folderEnum);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderEnum, path.basename(file)));
-              }
-
-              // --> EnumExt
-              if(file.endsWith(objIdentEnumExt,(fileNameLength-3))) {
-                this.syncFolderPath(folderEnumExt);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderEnumExt, path.basename(file)));
-              }
-
-              // --> Interface
-              if(file.endsWith(objIdentInterface,(fileNameLength-3))) {
-                this.syncFolderPath(folderInterface);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderInterface, path.basename(file)));
-              }
-
-              // --> Page
-              if(file.endsWith(objIdentPage,(fileNameLength-3))) {
-                this.syncFolderPath(folderPage);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderPage, path.basename(file)));
-              }
-
-              // --> PageExt
-              if(file.endsWith(objIdentPageExt,(fileNameLength-3))) {
-                this.syncFolderPath(folderPageExt);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderPageExt, path.basename(file)));
-              }
-
-              // --> Profile
-              if(file.endsWith(objIdentProfile,(fileNameLength-3))) {
-                this.syncFolderPath(folderProfile);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderProfile, path.basename(file)));
-              }
-
-              // --> Query
-              if(file.endsWith(objIdentQuery,(fileNameLength-3))) {
-                this.syncFolderPath(folderQuery);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderQuery, path.basename(file)));
-              }
-
-              // --> Report
-              if(file.endsWith(objIdentReport,(fileNameLength-3))) {
-                this.syncFolderPath(folderReport);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderReport, path.basename(file)));
-              }
-
-              // --> ReportExt
-              if(file.endsWith(objIdentReportExt,(fileNameLength-3))) {
-                this.syncFolderPath(folderReportExt);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderReportExt, path.basename(file)));
-              }
-
-              // --> Table
-              if(file.endsWith(objIdentTable,(fileNameLength-3))) {
-                this.syncFolderPath(folderTable);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderTable, path.basename(file)));
-              }
-
-              // --> TableExt
-              if(file.endsWith(objIdentTableExt,(fileNameLength-3))) {
-                this.syncFolderPath(folderTableExt);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderTableExt, path.basename(file)));
-              }
-
-              // --> Xmlport
-              if(file.endsWith(objIdentXmlport,(fileNameLength-3))) {
-                this.syncFolderPath(folderXmlport);
-                fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderXmlport, path.basename(file)));
-              }
-            }
-            break;
-          case "Object":
-            // AL files
-            if(file.split('.').pop() === fileExt.al) {
-              const filepath = path.join(rootFolder, path.basename(file));
-              const objType = this.getAlObjectType(filepath);
-
-              switch(objType) {
-                case "codeunit":
-                  this.syncFolderPath(folderCodeunit);
-                  fs.renameSync(filepath,path.join(folderCodeunit, path.basename(file)));
-                  break;
-                case "entitlement":
-                    this.syncFolderPath(folderEntitlement);
-                    fs.renameSync(filepath,path.join(folderEntitlement, path.basename(file)));
-                    break;
-                case "enum":
-                  this.syncFolderPath(folderEnum);
-                  fs.renameSync(filepath,path.join(folderEnum, path.basename(file)));
-                  break;
-                case "enumextension":
-                  this.syncFolderPath(folderEnumExt);
-                  fs.renameSync(filepath,path.join(folderEnumExt, path.basename(file)));
-                  break;
-                case "page":
-                  this.syncFolderPath(folderPage);
-                  fs.renameSync(filepath,path.join(folderPage, path.basename(file)));
-                  break;
-                case "pageextension":
-                  this.syncFolderPath(folderPageExt);
-                  fs.renameSync(filepath,path.join(folderPageExt, path.basename(file)));
-                  break;
-                case "permissionset":
-                  this.syncFolderPath(folderPermissionSet);
-                  fs.renameSync(filepath,path.join(folderPermissionSet, path.basename(file)));
-                  break;
-                case "permissionsetextension":
-                  this.syncFolderPath(folderPermissionSetExt);
-                  fs.renameSync(filepath,path.join(folderPermissionSetExt, path.basename(file)));
-                  break;
-                case "profile":
-                  this.syncFolderPath(folderProfile);
-                  fs.renameSync(filepath,path.join(folderProfile, path.basename(file)));
-                  break;
-                case "query":
-                  this.syncFolderPath(folderQuery);
-                  fs.renameSync(filepath,path.join(folderQuery, path.basename(file)));
-                  break;
-                case "report":
-                  this.syncFolderPath(folderReport);
-                  fs.renameSync(filepath,path.join(folderReport, path.basename(file)));
-                  break;
-                case "reportextension":
-                  this.syncFolderPath(folderReport);
-                  fs.renameSync(filepath,path.join(folderReport, path.basename(file)));
-                  break;
-                case "table":
-                  this.syncFolderPath(folderTable);
-                  fs.renameSync(filepath,path.join(folderTable, path.basename(file)));
-                  break;
-                case "tableextension":
-                  this.syncFolderPath(folderTableExt);
-                  fs.renameSync(filepath,path.join(folderTableExt, path.basename(file)));
-                  break;
-                case "xmlport":
-                  this.syncFolderPath(folderXmlport);
-                  fs.renameSync(filepath,path.join(folderXmlport, path.basename(file)));
-                  break;
-                default:
-                  console.log("no identified al object for the file " + file.toString());
-                  break;
-              }
-            }
-
-            break;
-        }
-        
-        // --> DOCX, RDL, RDLC & XLSX files
-        if((file.split('.').pop() === fileExt.docx) || (file.split('.').pop() === fileExt.rdl) || (file.split('.').pop() === fileExt.rdlc) || (file.split('.').pop() === fileExt.xlsx)) {
-          this.syncFolderPath(folderLayout);
-          fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderLayout, path.basename(file)));
-        }
-
-        // --> GIF, ICON, JPG & PNG files
-        if((file.split('.').pop() === fileExt.gif) || (file.split('.').pop() === fileExt.icon) || (file.split('.').pop() === fileExt.jpg) || (file.split('.').pop() === fileExt.png)) {
-          this.syncFolderPath(folderLogo);
-          fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderLogo, path.basename(file)));
-        }
-
-        // --> Translation.xlf files
-        if(file.split('.').pop() === fileExt.xlf) {
-          this.syncFolderPath(folderTranslation);
-          fs.renameSync(path.join(rootFolder, path.basename(file)),path.join(folderTranslation, path.basename(file)));
-        }
-      });
-    } catch (err) {
-      if (err instanceof ALFolderExistsError) {
-        this.window.showErrorMessage(`ALStructureCreator Error: '${err.message}'.`);
-      } else {
-        this.window.showErrorMessage(`Error: ${(err as Error).message}`);
-      }
-    }
-
-    this.window.showInformationMessage(`ALStructureCreator: Reorganize App Files Executed`);
   }
 
-  getAlObjectType(filename: string): string {
-    const result = readFileSync(filename, 'utf-8');
-    const maxReadLine = StructureSettings.getObjectMaxReadLine();
+    reorganizeAppFiles(): void {
+    const rootFolder = this.toAbsolutePath('');
+    const mode = StructureSettings.getObjectIdentification() as IdentificationMode;
+    const idents = StructureSettings.getObjectIdents();
+    const maxLines = StructureSettings.getObjectMaxReadLine();
+    const errors: string[] = [];
+    let movedFiles = 0;
 
-    let textLine: string;
-    let objFound = "";
-    let i = 0;
-    let foundObj = false;
+    for (const entry of fs.readdirSync(rootFolder, { withFileTypes: true })) {
+      if (!entry.isFile()) {
+        continue;
+      }
 
-    while ((i<maxReadLine) && (foundObj === false)) {
-      textLine = result.split("\n")[i];
+      // Each file is handled on its own, so one error does not stop the others.
+      try {
+        const folderKey = this.getTargetFolderKey(path.join(rootFolder, entry.name), mode, idents, maxLines);
+        if (!folderKey) {
+          continue;
+        }
 
-      if (textLine.startsWith("codeunit ")) {
-        objFound = "codeunit";
-        foundObj = true;
+        const targetFolder = this.getFolderTypePath(folderKey);
+        if (targetFolder === '') {
+          errors.push(`${entry.name}: folder '${folderKey}' not found in the FolderStructure setting`);
+          continue;
+        }
+
+        const targetFile = path.join(targetFolder, entry.name);
+        if (fs.existsSync(targetFile)) {
+          errors.push(`${entry.name}: already exists in '${targetFolder}'`);
+          continue;
+        }
+
+        fs.mkdirSync(targetFolder, { recursive: true });
+        fs.renameSync(path.join(rootFolder, entry.name), targetFile);
+        movedFiles++;
+      } catch (err) {
+        errors.push(`${entry.name}: ${(err as Error).message}`);
       }
-      if (textLine.startsWith("entitlement ")) {
-        objFound = "entitlement";
-        foundObj = true;
-      }
-      if (textLine.startsWith("enum ")) {
-        objFound = "enum";
-        foundObj = true;
-      }
-      if (textLine.startsWith("enumextension ")) {
-        objFound = "enumextension";
-        foundObj = true;
-      }
-      if (textLine.startsWith("page ")) {
-        objFound = "page";
-        foundObj = true;
-      }
-      if (textLine.startsWith("pageextension ")) {
-        objFound = "pageextension";
-        foundObj = true;
-      }
-      if (textLine.startsWith("permissionset ")) {
-        objFound = "permissionset";
-        foundObj = true;
-      }
-      if (textLine.startsWith("profile ")) {
-        objFound = "profile";
-        foundObj = true;
-      }
-      if (textLine.startsWith("query ")) {
-        objFound = "query";
-        foundObj = true;
-      }
-      if (textLine.startsWith("report ")) {
-        objFound = "report";
-        foundObj = true;
-      }
-      if (textLine.startsWith("table ")) {
-        objFound = "table";
-        foundObj = true;
-      }
-      if (textLine.startsWith("tableextension ")) {
-        objFound = "tableextension";
-        foundObj = true;
-      }
-      if (textLine.startsWith("xmlport ")) {
-        objFound = "xmlport";
-        foundObj = true;
-      }
-      i++;
     }
 
-    return objFound;
+    if (errors.length > 0) {
+      this.window.showErrorMessage(`ALStructureCreator: ${errors.length} file(s) were not moved. ${errors.join('; ')}`);
+    }
+    this.window.showInformationMessage(`ALStructureCreator: Reorganize App Files Executed (${movedFiles} file(s) moved)`);
+  }
+
+  /** Decides the target folder key of one file, or undefined to leave it where it is. */
+  private getTargetFolderKey(filePath: string, mode: IdentificationMode, idents: ObjectIdents, maxLines: number): string | undefined {
+    const resourceFolder = matchResourceFolder(filePath);
+    if (resourceFolder) {
+      return resourceFolder;
+    }
+
+    if (mode === 'Object') {
+      if (path.extname(filePath).toLowerCase() !== '.al') {
+        return undefined;
+      }
+      return detectObjectType(fs.readFileSync(filePath, 'utf-8'), maxLines)?.folderKey;
+    }
+
+    return matchFileName(path.basename(filePath), mode, idents)?.folderKey;
   }
 
   getFolderTypePath(folderType: string): string {
@@ -795,20 +396,6 @@ export class ALStructureCreator implements IDisposable {
     }
     return currFolderType;
   }
-  
-  syncFolderPath(folderPath: string) {
-    try {
-      if(!fs.existsSync(folderPath)) {
-        fs.mkdirSync(`${folderPath}`);
-      }
-    } catch (err) {
-      if (err instanceof ALFolderExistsError) {
-        this.window.showErrorMessage(`ALStructureCreator Error: '${err.message}'.`);
-      } else {
-        this.window.showErrorMessage(`Error: ${(err as Error).message}`);
-      }
-    }
-  }
 
   validate(name: string): string | null {
     if (!name) {
@@ -845,18 +432,6 @@ export class ALStructureCreator implements IDisposable {
   appendProp(current: string, property: string): string {
     return (current+'.'+property);
   }
-
-  isSingleFolderProject() {
-        const workspaceFolders = vscode.workspace.workspaceFolders;
-        
-        if (workspaceFolders) {
-            // Check if there is only one workspace folder
-            return workspaceFolders.length === 1;
-        } else {
-            // No workspace folders, likely a single-folder project
-            return true;
-        }
-    }
 }
 
 type FolderType = {
