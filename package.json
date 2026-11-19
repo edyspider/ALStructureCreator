@@ -46,11 +46,13 @@
 		"keybindings": [
 			{
 				"command": "alstructurecreator.createallstructure",
-				"key": "Alt-E+Alt-C"
+				"key": "alt+e alt+c",
+				"when": "workspaceFolderCount > 0"
 			},
 			{
 				"command": "alstructurecreator.reorganizefiles",
-				"key": "Alt-E+Alt-R"
+				"key": "alt+e alt+r",
+				"when": "workspaceFolderCount > 0"
 			}
 		],
 		"configuration": [
@@ -63,101 +65,28 @@
 						"scope": "window",
 						"properties": {
 							"structure": {
-								"logo": {
-									"name": "logo",
-									"autocreate": true
-								},
-								"object": {
-									"name": "src",
-									"autocreate": true,
-									"subfolder": {
-										"codeunit": {
-											"name": "codeunit",
-											"autocreate": true
+								"type": "object",
+								"description": "Folders of the AL project, by folder key.",
+								"additionalProperties": {
+									"type": "object",
+									"properties": {
+										"name": {
+											"type": "string",
+											"description": "Name of the folder when it is created."
 										},
-										"controladdin": {
-											"name": "controladdin",
-											"autocreate": false
+										"autocreate": {
+											"type": "boolean",
+											"description": "Create this folder with the \"ES: Create All Folder Structure\" command."
 										},
-										"dotnet": {
-											"name": "dotnet",
-											"autocreate": false
+										"createcust": {
+											"type": "boolean",
+											"description": "Also create a \"<name>cust\" folder for customizations."
 										},
-										"entitlement": {
-											"name": "entitlement",
-											"autocreate": false
-										},
-										"enum": {
-											"name": "enum",
-											"autocreate": false
-										},
-										"enumext": {
-											"name": "enumext",
-											"autocreate": false
-										},
-										"interface": {
-											"name": "interface",
-											"autocreate": false
-										},
-										"page": {
-											"name": "page",
-											"autocreate": true
-										},
-										"pageext": {
-											"name": "pageext",
-											"autocreate": false
-										},
-										"permissionset": {
-											"name": "permissionset",
-											"autocreate": true
-										},
-										"permissionsetext": {
-											"name": "permissionsetext",
-											"autocreate": false
-										},
-										"profile": {
-											"name": "profile",
-											"autocreate": false
-										},
-										"query": {
-											"name": "query",
-											"autocreate": true
-										},
-										"report": {
-											"name": "report",
-											"autocreate": true,
-											"subfolder": {
-												"layout": {
-													"name": "layout",
-													"autocreate": true
-												}
-											}
-										},
-										"reportext": {
-											"name": "reportext",
-											"autocreate": false
-										},
-										"table": {
-											"name": "table",
-											"autocreate": true
-										},
-										"tableext": {
-											"name": "tableext",
-											"autocreate": false
-										},
-										"xmlport": {
-											"name": "xmlport",
-											"autocreate": true
+										"subfolder": {
+											"type": "object",
+											"description": "Subfolders of this folder, with the same properties."
 										}
 									}
-								},
-								"translation": {
-									"name": "translations",
-									"autocreate": true
-								},
-								"webservice": {
-									"name": "webservice",
-									"autocreate": false
 								}
 							}
 						},
@@ -370,7 +299,7 @@
 					"ALStructureCreator.ObjectIdent.XmlPort": {
 						"type": "string",
 						"default": "XmlPort",
-						"description": "This configuration defines how to identify table file name."
+						"description": "This configuration defines how to identify xmlport file name."
 					}
 				}
 			}
