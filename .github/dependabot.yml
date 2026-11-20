@@ -7,8 +7,19 @@ updates:
     groups:
       dev-dependencies:
         dependency-type: development
-
+    ignore:
+      # Must match engines.vscode (^1.95.0); raise both together by hand.
+      - dependency-name: "@types/vscode"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      # VS Code 1.95 runs on Node 20.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+      # typescript-eslint 8 only supports TypeScript < 6.1.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+ 
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: monthly
+ 
