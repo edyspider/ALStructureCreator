@@ -43,7 +43,7 @@ jobs:
         run: npx --yes @vscode/vsce@3 package
 
       - name: Upload the .vsix
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: alstructurecreator-vsix
           path: '*.vsix'
