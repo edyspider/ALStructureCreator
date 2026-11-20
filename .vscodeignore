@@ -13,3 +13,5 @@ node_modules/**
 eslint.config.mjs
 tsconfig.json
 tslint.json
+test-fixtures/**
+.vscode-test.mjs

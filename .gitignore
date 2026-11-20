@@ -11,3 +11,7 @@ node_modules/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Integration test workspace (only .gitkeep is tracked)
+test-fixtures/workspace/*
+!test-fixtures/workspace/.gitkeep
