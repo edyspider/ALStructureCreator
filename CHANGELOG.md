@@ -4,6 +4,34 @@ All notable changes to the **AL Structure Creator** extension will be documented
 
 ----
 
+## 2.0.0
+
+### Breaking
+
+- The `pageExt` folder key in `FolderStructure` is now `pageext`, like the other folder keys. Rename it if you customised it.
+- Requires VS Code 1.95 or later.
+
+### Fixed
+
+- Folders for extension objects (`enumext`, `pageext`, `permissionsetext`, `reportext`, `tableext`) are created and found again.
+- **Reorganize Files** recognises `reportextension` and `permissionsetextension` objects and the longest matching identifier wins (`PageExt` before `Page`).
+- **Reorganize Files** no longer stops when one file fails, skips files that already exist in the target folder and reports how many files were moved.
+- **Create Folder Structure** accepts folder keys you added to `FolderStructure`, and shows an error when a built-in folder is missing from that setting.
+- Cancelling the folder input no longer shows a success message.
+- Keyboard shortcuts `Alt+E Alt+C` and `Alt+E Alt+R` now work.
+- Commands show a clear message when no folder or workspace is open.
+- The `FolderStructure` setting is validated in the Settings editor.
+- The README now lists the right command names and shortcuts.
+
+### Changed
+
+- File reorganization is driven by one table of object types instead of one block of code per type.
+- Upgraded to TypeScript 6 and replaced TSLint with ESLint.
+- Added unit and integration tests and a GitHub Actions workflow that builds, tests and packages the extension.
+- The published package no longer includes source files, tests or `node_modules`.
+
+----
+
 ## 1.7.0
 
 ### Added
