@@ -9,7 +9,7 @@
 		"url": "https://github.com/edyspider",
 		"email": "dev@edyspider.com"
 	},
-	"version": "1.7.0",
+	"version": "2.0.0",
 	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/edyspider/ALStructureCreator/issues"
@@ -25,13 +25,8 @@
 		"Dynamics NAV"
 	],
 	"engines": {
-		"vscode": "^1.41.0"
+		"vscode": "^1.95.0"
 	},
-	"activationEvents": [
-		"onCommand:alstructurecreator.createallstructure",
-		"onCommand:alstructurecreator.createstructure",
-		"onCommand:alstructurecreator.reorganizefiles"
-	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
@@ -51,11 +46,13 @@
 		"keybindings": [
 			{
 				"command": "alstructurecreator.createallstructure",
-				"key": "Alt-E+Alt-C"
+				"key": "alt+e alt+c",
+				"when": "workspaceFolderCount > 0"
 			},
 			{
 				"command": "alstructurecreator.reorganizefiles",
-				"key": "Alt-E+Alt-R"
+				"key": "alt+e alt+r",
+				"when": "workspaceFolderCount > 0"
 			}
 		],
 		"configuration": [
@@ -68,101 +65,28 @@
 						"scope": "window",
 						"properties": {
 							"structure": {
-								"logo": {
-									"name": "logo",
-									"autocreate": true
-								},
-								"object": {
-									"name": "src",
-									"autocreate": true,
-									"subfolder": {
-										"codeunit": {
-											"name": "codeunit",
-											"autocreate": true
+								"type": "object",
+								"description": "Folders of the AL project, by folder key.",
+								"additionalProperties": {
+									"type": "object",
+									"properties": {
+										"name": {
+											"type": "string",
+											"description": "Name of the folder when it is created."
 										},
-										"controladdin": {
-											"name": "controladdin",
-											"autocreate": false
+										"autocreate": {
+											"type": "boolean",
+											"description": "Create this folder with the \"ES: Create All Folder Structure\" command."
 										},
-										"dotnet": {
-											"name": "dotnet",
-											"autocreate": false
+										"createcust": {
+											"type": "boolean",
+											"description": "Also create a \"<name>cust\" folder for customizations."
 										},
-										"entitlement": {
-											"name": "entitlement",
-											"autocreate": false
-										},
-										"enum": {
-											"name": "enum",
-											"autocreate": false
-										},
-										"enumext": {
-											"name": "enumext",
-											"autocreate": false
-										},
-										"interface": {
-											"name": "interface",
-											"autocreate": false
-										},
-										"page": {
-											"name": "page",
-											"autocreate": true
-										},
-										"pageext": {
-											"name": "pageext",
-											"autocreate": false
-										},
-										"permissionset": {
-											"name": "permissionset",
-											"autocreate": true
-										},
-										"permissionsetext": {
-											"name": "permissionsetext",
-											"autocreate": false
-										},
-										"profile": {
-											"name": "profile",
-											"autocreate": false
-										},
-										"query": {
-											"name": "query",
-											"autocreate": true
-										},
-										"report": {
-											"name": "report",
-											"autocreate": true,
-											"subfolder": {
-												"layout": {
-													"name": "layout",
-													"autocreate": true
-												}
-											}
-										},
-										"reportext": {
-											"name": "reportext",
-											"autocreate": false
-										},
-										"table": {
-											"name": "table",
-											"autocreate": true
-										},
-										"tableext": {
-											"name": "tableext",
-											"autocreate": false
-										},
-										"xmlport": {
-											"name": "xmlport",
-											"autocreate": true
+										"subfolder": {
+											"type": "object",
+											"description": "Subfolders of this folder, with the same properties."
 										}
 									}
-								},
-								"translation": {
-									"name": "translations",
-									"autocreate": true
-								},
-								"webservice": {
-									"name": "webservice",
-									"autocreate": false
 								}
 							}
 						},
@@ -208,7 +132,7 @@
 											"name": "page",
 											"autocreate": true
 										},
-										"pageExt": {
+										"pageext": {
 											"name": "pageext",
 											"autocreate": false
 										},
@@ -375,7 +299,7 @@
 					"ALStructureCreator.ObjectIdent.XmlPort": {
 						"type": "string",
 						"default": "XmlPort",
-						"description": "This configuration defines how to identify table file name."
+						"description": "This configuration defines how to identify xmlport file name."
 					}
 				}
 			}
@@ -385,20 +309,23 @@
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
+		"lint": "eslint src",
 		"pretest": "npm run compile",
-		"test": "node ./out/test/runTest.js"
+		"test": "npm run test:unit && npm run test:integration",
+		"test:unit": "node --test \"out/test/unit/**/*.test.js\"",
+		"test:integration": "vscode-test"
 	},
 	"devDependencies": {
-		"@types/glob": "^7.1.1",
-		"@types/mocha": "^5.2.7",
-		"@types/node": "^12.20.55",
-		"@types/vscode": "^1.41.0",
-		"ansi-regex": ">=5.0.1",
-		"glob": "^7.1.5",
-		"mocha": "^10.8.2",
-		"tslint": "^5.20.0",
-		"typescript": "^3.6.4",
-		"vscode-test": "^1.6.1"
+		"@eslint/js": "^10.0.1",
+		"@types/mocha": "^10.0.10",
+		"@types/node": "^20.19.43",
+		"@types/vscode": "1.95.0",
+		"@vscode/test-cli": "^0.0.15",
+		"@vscode/test-electron": "^3.1.0",
+		"eslint": "^10.15.0",
+		"mocha": "^12.0.3",
+		"typescript": "~6.0.3",
+		"typescript-eslint": "^8.73.0"
 	},
 	"repository": {
 		"type": "git",
